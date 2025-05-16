@@ -1,26 +1,204 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --deck-main: #f57f17;
+  --deck-extra: #5b21b6;
+  --deck-side: #15803d;
+  background-color: #000814;
+  background: url(../../public/assets/background-repeat.jpeg);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.layout-main {
+  min-height: calc(100dvh - 142px);
+  padding-top: 114px; /*  taille du header  */
+  @apply grid place-items-center;
+}
+
+footer {
+  @apply w-full h-[142px] backdrop-blur bg-transparent border-t-2 border-black;
+}
+
+header {
+  @apply backdrop-blur border-b-2 border-b-black shadow;
+}
+
+.details-item {
+  text-align: center;
+  flex-basis: 50%;
+}
+
+.mouseContainer {
+  position: relative;
+  border-radius: 15px;
+  background-color: #202020;
+  display: grid;
+  place-content: center;
+  place-items: center;
+  width: 400px;
+  height: 480px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-content: center;
+  z-index: 25;
+}
+
+.main-deck {
+  @apply bg-yellow-900 my-4 rounded-md border-4 border-orange-950;
+}
+
+.extra-deck {
+  @apply bg-violet-800 my-4 rounded-md border-4 border-violet-950;
+}
+
+.side-deck {
+  @apply bg-green-700 my-4 rounded-md border-4 border-teal-950;
+}
+
+.deck-display {
+  @apply grid grid-cols-4 lg:grid-cols-5 max-sm:grid-cols-2 place-items-center gap-6 p-4;
+}
+
+.scrollbar-main::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Couleur de fond de la barre de défilement */
+.scrollbar-main::-webkit-scrollbar-track {
+  background-color: #f57f17;
+  border-radius: 10px;
+}
+
+/* Couleur de remplissage de la poignée (barre de défilement) */
+.scrollbar-main::-webkit-scrollbar-thumb {
+  background-color: #202020;
+  border-radius: 25px;
+}
+
+/* Couleur de survol de la poignée (barre de défilement) */
+.scrollbar-main::-webkit-scrollbar-thumb:active {
+  background-color: #000814;
+}
+
+/* Couleur de fond des boutons de flèche de défilement */
+.scrollbar-main::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Couleur de fond de la barre de défilement lors du défilement */
+.scrollbar-main::-webkit-scrollbar-track-piece:start {
+  background-color: #000814;
+}
+
+.scrollbar-extra::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Couleur de fond de la barre de défilement */
+.scrollbar-extra::-webkit-scrollbar-track {
+  background-color: #5b21b6;
+  border-radius: 10px;
+}
+
+/* Couleur de remplissage de la poignée (barre de défilement) */
+.scrollbar-extra::-webkit-scrollbar-thumb {
+  background-color: #202020;
+  border-radius: 25px;
+}
+
+/* Couleur de survol de la poignée (barre de défilement) */
+.scrollbar-extra::-webkit-scrollbar-thumb:active {
+  background-color: #000814;
+}
+
+/* Couleur de fond des boutons de flèche de défilement */
+.scrollbar-extra::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Couleur de fond de la barre de défilement lors du défilement */
+.scrollbar-extra::-webkit-scrollbar-track-piece:start {
+  background-color: #000814;
+}
+
+.scrollbar-side::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Couleur de fond de la barre de défilement */
+.scrollbar-side::-webkit-scrollbar-track {
+  background-color: #15803d;
+  border-radius: 10px;
+}
+
+/* Couleur de remplissage de la poignée (barre de défilement) */
+.scrollbar-side::-webkit-scrollbar-thumb {
+  background-color: #202020;
+  border-radius: 25px;
+}
+
+/* Couleur de survol de la poignée (barre de défilement) */
+.scrollbar-side::-webkit-scrollbar-thumb:active {
+  background-color: #000814;
+}
+
+/* Couleur de fond des boutons de flèche de défilement */
+.scrollbar-side::-webkit-scrollbar-button {
+  display: none;
+}
+
+/* Couleur de fond de la barre de défilement lors du défilement */
+.scrollbar-side::-webkit-scrollbar-track-piece:start {
+  background-color: #000814;
+}
+
+.input[type="text"] {
+  border: 2px solid transparent;
+  width: 15em;
+  height: 2.5em;
+  padding-left: 0.8em;
+  outline: none;
+  overflow: hidden;
+  background-color: #f3f3f3;
+  border-radius: 10px;
+  transition: all 0.5s;
+}
+
+.input[type="text"]:hover,
+.input[type="text"]:focus {
+  border: 2px solid #4a9dec;
+  box-shadow: 0px 0px 0px 7px rgb(74, 157, 236, 20%);
+  background-color: white;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #cbd5e0;
+  border-radius: 0.25rem;
+  background-color: white;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
 }
