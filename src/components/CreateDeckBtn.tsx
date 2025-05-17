@@ -2,7 +2,7 @@
 
 import { toast } from "react-toastify";
 import { SessionUser } from "@/types";
-import createDeck from "@/actions/deck/createDeck";
+import createDeck from "@/actions/users/deck/createDeck";
 import useDeckContext from "@/context/DeckContext";
 import isDeckValid from "@/utils/isDeckValid";
 import { useLocalStorage } from "@/hooks/useLocalStorage";

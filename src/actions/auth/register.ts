@@ -63,13 +63,13 @@ export async function signup(formData: FormData) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Créer l'utilisateur
-    const user = await Users.create({
+    await Users.create({
       pseudo,
       email,
       password: hashedPassword,
     });
 
-    return { success: true, user };
+    return { success: true };
   } catch (error) {
     console.error("Erreur lors de l'inscription:", error);
     return { error: "Erreur serveur" };

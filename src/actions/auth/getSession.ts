@@ -45,7 +45,7 @@ export async function getSession() {
     // Retourner les informations de l'utilisateur
     return {
       user: {
-        id: user.id,
+        id: user.id.toString(),
         pseudo: dbUser.pseudo,
         email: dbUser.email,
       },

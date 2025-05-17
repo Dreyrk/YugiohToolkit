@@ -9,7 +9,7 @@ import db from "@/lib/database/db";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
-  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
 });
 
 export async function login(formData: FormData) {
@@ -39,12 +39,12 @@ export async function login(formData: FormData) {
 
     const user = await Users.findOne({ email });
     if (!user) {
-      return { errors: { email: "Identifiants invalides" } };
+      return { errors: { email: "Email invalide" } };
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return { errors: { password: "Identifiants invalides" } };
+      return { errors: { password: "Mot de passe incorrect" } };
     }
 
     // Créer la session
