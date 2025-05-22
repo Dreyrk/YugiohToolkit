@@ -6,15 +6,13 @@ function getAvgPrice(prices: CardPrices): any {
   const avg: number =
     currentPrice
       .map((el: string) => parseFloat(el))
-      .reduce(
-        (prev: number, curr: number): number =>
-          (prev as number) + (curr as number)
-      ) / parseFloat(currentPrice.length);
+      .reduce((prev: number, curr: number): number => (prev as number) + (curr as number)) /
+    parseFloat(currentPrice.length);
 
   return avg.toFixed(2);
 }
 
-function createCustomCards(cards: FetchedCards[], deckType?: string) {
+function createCustomCards(cards: FetchedCards[], deckType: string | null) {
   const cleanCards = cards.map((card: FetchedCards): YugiCards => {
     return {
       id: card.id,

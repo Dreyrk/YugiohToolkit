@@ -10,6 +10,7 @@ import Loader from "./Loader";
 import FiltersBar from "./FiltersBar";
 
 export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToDeckModalProps) {
+  console.log(allCards);
   const listRef = useRef<HTMLUListElement>(null);
   const { deck, dispatch } = useDeckContext();
   const [selectedCards, setSelectedCards] = useState(deck[deckType]);
@@ -71,14 +72,14 @@ export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToD
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-stone-200 w-[92dvw] h-[85dvh] overflow-hidden lg:w-[950px] p-4 flex flex-col justify-between rounded-sm shadow-lg z-50">
+        className="bg-neutral-700 text-slate-100 w-[92dvw] h-[85dvh] overflow-hidden lg:w-[950px] p-4 flex flex-col justify-between rounded-sm shadow-lg z-50">
         <div className="w-full text-end">
           <button className="max-w-[35px]" onClick={closeModal} type="button">
-            <AiOutlineCloseCircle color="black" size={30} />
+            <AiOutlineCloseCircle color="white" size={30} />
           </button>
         </div>
         <div className="flex justify-between mt-4">
-          <p className="text-2xl px-4 text-black font-semibold">
+          <p className="text-2xl px-4 font-semibold">
             <span style={{ color: `var(--deck-${deckType})` }} className={`mx-1 capitalize`}>
               {deckType}
             </span>
@@ -95,7 +96,7 @@ export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToD
         <div className="h-full w-full p-2">
           <div className="flex flex-col items-center gap-6 px-4 py-4">
             <input
-              className="w-5/6 rounded-md p-1 box-border"
+              className="w-5/6 rounded-md p-1 box-border bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="search"
               type="text"
               placeholder="Search..."

@@ -15,7 +15,7 @@ export interface YugiCards {
   attribute: string;
   img: string;
   price: number;
-  deckType?: string;
+  deckType: string | null;
 }
 
 export interface Deck {

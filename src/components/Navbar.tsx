@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { MdLogin } from "react-icons/md";
 import { BiUserCircle } from "react-icons/bi";
 import { SessionUser } from "@/types";
+import { IoLogIn } from "react-icons/io5";
 
 export default function Navbar({ user }: { user: SessionUser | null }) {
   return (
@@ -15,15 +15,14 @@ export default function Navbar({ user }: { user: SessionUser | null }) {
         </Link>
         <h1 className="text-white text-5xl text-center font-semibold">Deck Builder</h1>
         <Link
-          className="bg-slate-100 hover:bg-gray-300 text-black font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
+          className="text-slate-100 font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out"
           href={user && user.id ? "/profile" : "/auth"}
           replace={true}>
           {user && user.id ? (
             <BiUserCircle size={30} />
           ) : (
             <>
-              <span className="hidden md:block">Inscription / Login</span>
-              <MdLogin className="md:hidden block" size={30} />
+              <IoLogIn size={30} />
             </>
           )}
         </Link>

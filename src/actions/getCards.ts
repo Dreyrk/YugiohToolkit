@@ -1,39 +1,37 @@
 "use server";
 
+import db from "@/lib/database/db";
+import Cards from "@/lib/database/models/cards.model";
 import { YugiCards } from "../types/index";
-import createCustomCards from "../utils/createCustomCards";
-import { MainDeckTypes, ExtraDeckTypes } from "@/constants";
 
-const getUrl = (type: string) => {
-  switch (type) {
-    case "main":
-      return `https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr&type=${MainDeckTypes.join(",")}`;
-    case "extra":
-      return `https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr&type=${ExtraDeckTypes.join(",")}`;
-    case "side":
-      return `https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr`;
-    default:
-      return "https://db.ygoprodeck.com/api/v7/cardinfo.php?language=fr";
-  }
-};
-
-async function getCards(type: string) {
+export default async function getCards(type: string): Promise<YugiCards[] | null> {
   try {
-    const url = getUrl(type);
-    const res = await fetch(url, {
-      cache: "no-store",
-    });
+    await db();
 
-    if (res.ok) {
-      const data = await res.json();
-
-      const cards: YugiCards[] = createCustomCards(data.data, type);
-
-      return cards;
+    let query: { deckType?: string | null | { $in: (string | null)[] } } = {};
+    if (type === "main" || type === "extra") {
+      query = { deckType: type };
     }
-  } catch (e: any) {
-    console.error(e.message);
+
+    const cards = await Cards.find(query).lean().select("-__v").exec();
+
+    const formattedCards: YugiCards[] = cards.map((card) => ({
+      id: card.id,
+      name: card.name,
+      type: card.type,
+      desc: card.desc,
+      atk: card.atk,
+      def: card.def,
+      level: card.level,
+      race: card.race,
+      attribute: card.attribute,
+      img: card.img,
+      price: card.price,
+      deckType: card.deckType,
+    }));
+    return formattedCards;
+  } catch (e) {
+    console.error("Error fetching cards from database:", (e as Error).message);
+    return null;
   }
 }
-
-export default getCards;

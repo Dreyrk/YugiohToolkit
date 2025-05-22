@@ -11,19 +11,14 @@ export async function getSession() {
     // Récupérer le cookie de session
     const sessionId = cookieStore.get(lucia.sessionCookieName)?.value;
     if (!sessionId) {
-      return { user: null, error: null };
+      return { user: null, error: null, invalidate: false };
     }
 
     // Valider la session avec Lucia
     const { session, user } = await lucia.validateSession(sessionId);
     if (!session || !user) {
-      // Supprimer le cookie si la session est invalide
-      cookieStore.set(
-        lucia.createBlankSessionCookie().name,
-        lucia.createBlankSessionCookie().value,
-        lucia.createBlankSessionCookie().attributes
-      );
-      return { user: null, error: null };
+      // Indiquer que la session est invalide et doit être supprimée
+      return { user: null, error: null, invalidate: true };
     }
 
     // Connexion à la base de données
@@ -32,14 +27,9 @@ export async function getSession() {
     // Récupérer les informations utilisateur
     const dbUser = await Users.findById(user.id).select("pseudo email");
     if (!dbUser) {
-      // Si l'utilisateur n'existe pas, invalider la session
+      // Indiquer que l'utilisateur n'existe pas et que la session doit être invalidée
       await lucia.invalidateSession(sessionId);
-      cookieStore.set(
-        lucia.createBlankSessionCookie().name,
-        lucia.createBlankSessionCookie().value,
-        lucia.createBlankSessionCookie().attributes
-      );
-      return { user: null, error: null };
+      return { user: null, error: null, invalidate: true };
     }
 
     // Retourner les informations de l'utilisateur
@@ -50,9 +40,10 @@ export async function getSession() {
         email: dbUser.email,
       },
       error: null,
+      invalidate: false,
     };
   } catch (error) {
     console.error("Erreur lors de la récupération de la session:", error);
-    return { user: null, error: "Erreur serveur" };
+    return { user: null, error: "Erreur serveur", invalidate: false };
   }
 }

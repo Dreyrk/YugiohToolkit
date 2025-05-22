@@ -6,6 +6,6 @@ const SessionSchema = new mongoose.Schema({
   expires_at: { type: Date, required: true },
 });
 
-const Session = mongoose.models.Session || mongoose.model("sessions", SessionSchema);
+const Session = mongoose.models.Session || mongoose.model("Session", SessionSchema);
 
 export default Session;

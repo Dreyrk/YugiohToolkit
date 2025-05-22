@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { YugiCardProps, YugiCards } from "@/types";
 import Image from "next/image";
 import RemoveCardBtn from "../RemoveCardBtn";
@@ -13,29 +13,57 @@ export default function YugiCard({
   selectedCards,
   setSelectedCards,
 }: YugiCardProps) {
-  const isSelected = selectedCards?.length ? countCards(card, selectedCards) : 0;
+  const isSelected = selectedCards ? countCards(card, selectedCards) : 0;
   const [selected, setSelected] = useState(isSelected);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+    setSelected(selectedCards ? countCards(card, selectedCards) : 0);
+  }, [selectedCards, card]);
 
   const selectCard = () => {
+    if (!setSelectedCards) {
+      return;
+    }
+
     if (selected < 3) {
-      setSelectedCards((prev: YugiCards[]) => [...prev, card]);
+      setSelectedCards((prev: YugiCards[] = []) => [...prev, card]);
       setSelected(selected + 1);
     } else {
-      setSelectedCards((prev: YugiCards[]) => prev.filter((currentCard: YugiCards) => currentCard.id !== card.id));
+      setSelectedCards((prev: YugiCards[] = []) => prev.filter((currentCard: YugiCards) => currentCard.id !== card.id));
       setSelected(0);
     }
   };
 
+  const isInteractive = isMounted && setSelectedCards;
+
   return (
-    <button onClick={selectCard} type="button" className="relative hover:scale-95">
+    <div
+      onClick={isInteractive ? selectCard : undefined}
+      role={isInteractive ? "button" : undefined}
+      tabIndex={isInteractive ? 0 : undefined}
+      className={`relative ${isInteractive ? "hover:scale-95 cursor-pointer" : "cursor-default"}`}
+      onKeyDown={
+        isInteractive
+          ? (e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                selectCard();
+              }
+            }
+          : undefined
+      }>
       {inDeck && deckType && <RemoveCardBtn deckType={deckType} cardId={card.id} />}
-      <span
-        className={`${
-          !selected && "hidden"
-        } absolute top-[40%] left-[37%] z-50 bg-slate-200 rounded-full h-8 w-8 grid place-content-center font-semibold`}>
-        {selected}
-      </span>
+      {isMounted && (
+        <span
+          className={`${
+            !selected ? "hidden" : ""
+          } absolute top-[40%] left-[37%] z-50 bg-slate-200 rounded-full h-8 w-8 grid place-content-center font-semibold`}>
+          {selected}
+        </span>
+      )}
       <Image className="z-40" src={card.img ? card.img : "/assets/cardBack.jpg"} alt="card" width={180} height={260} />
-    </button>
+    </div>
   );
 }

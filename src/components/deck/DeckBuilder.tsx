@@ -16,9 +16,9 @@ export default function DeckBuilder({
   sideCards,
   user,
 }: {
-  mainCards: YugiCards[];
-  extraCards: YugiCards[];
-  sideCards: YugiCards[];
+  mainCards: YugiCards[] | null;
+  extraCards: YugiCards[] | null;
+  sideCards: YugiCards[] | null;
   user: SessionUser | null;
 }) {
   const { deck, dispatch } = useDeckContext();
@@ -38,10 +38,10 @@ export default function DeckBuilder({
               Nom du Deck :
             </label>
             <input
-              className="py-1 px-2 rounded-lg placeholder:italic"
+              className="py-1 px-2 rounded-lg placeholder:italic bg-white text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
               type="text"
               id="name"
-              value={deck.name}
+              value={deck.name || ""}
               onChange={(e) =>
                 dispatch({
                   type: "CHANGE_NAME",
