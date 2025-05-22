@@ -12,8 +12,13 @@ export default async function Page({ params }: { params: { userId: string; deckI
   const deck = await getDeck(userId, deckId);
 
   const deleteUserDeck = async () => {
-    await deleteDeck(userId, deckId);
-    redirect(`/profile/${userId}/decks`);
+    "use server";
+    const { success } = await deleteDeck(userId, deckId);
+    if (success) {
+      redirect(`/profile/${userId}/decks`);
+    } else {
+      throw new Error("Something wrong on deck deletion");
+    }
   };
 
   const deckLength = getDeckLength(deck);

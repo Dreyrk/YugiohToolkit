@@ -1,24 +1,17 @@
 "use server";
 
-import createCustomCards from "../utils/createCustomCards";
+import db from "@/lib/database/db";
+import Cards from "@/lib/database/models/cards.model";
 
 async function getCardsById(id: string) {
   try {
-    const res = await fetch(
-      `https://db.ygoprodeck.com/api/v7/cardinfo.php?id=${id}`
-    );
+    await db();
 
-    if (res.ok) {
-      const data = await res.json();
+    const card = await Cards.findById(id);
 
-      const cards = createCustomCards(data.data);
-
-      return cards[0];
-    } else {
-      console.error("failed to fetch");
-    }
-  } catch (e: any) {
-    console.error(e.message);
+    return card;
+  } catch (e) {
+    console.error((e as Error).message);
   }
 }
 

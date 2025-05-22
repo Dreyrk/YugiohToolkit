@@ -7,7 +7,5 @@ export default async function Home() {
 
   const session = await getSession();
 
-  console.log(mainCards, extraCards);
-
   return <DeckClient user={session.user || null} mainCards={mainCards} extraCards={extraCards} sideCards={sideCards} />;
 }

@@ -1,19 +1,21 @@
 "use server";
 
-import { connect } from "@/lib/dbConnection";
-import Users from "@/models/usersModel";
+import db from "@/lib/database/db";
+import Users from "@/lib/database/models/users.model";
 
 async function getUserDecks(id: string) {
   try {
-    await connect();
+    await db();
+
     const currentUser = await Users.findById(id).select("decks");
+
     if (currentUser.decks.length) {
       return currentUser.decks;
     } else {
       return { message: "no deck created yet" };
     }
-  } catch (e: any) {
-    throw new Error(`failed to get decks from user ${id}: ${e.message}`);
+  } catch (e) {
+    throw new Error(`failed to get decks from user ${id}: ${(e as Error).message}`);
   }
 }
 

@@ -4,6 +4,7 @@ import AnimatedText from "@/components/AnimatedText";
 import DeckBuilder from "@/components/deck/DeckBuilder";
 import { YugiCards, SessionUser } from "@/types";
 import Loader from "../Loader";
+import DeckContextProvider from "@/context/DeckContextProvider";
 
 type Props = {
   user: SessionUser | null;
@@ -19,7 +20,9 @@ export default function DeckClient({ user, mainCards, extraCards, sideCards }: P
       {!mainCards || !extraCards || !sideCards ? (
         <Loader />
       ) : (
-        <DeckBuilder user={user} mainCards={mainCards} extraCards={extraCards} sideCards={sideCards} />
+        <DeckContextProvider>
+          <DeckBuilder user={user} mainCards={mainCards} extraCards={extraCards} sideCards={sideCards} />
+        </DeckContextProvider>
       )}
     </>
   );

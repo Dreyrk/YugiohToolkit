@@ -1,11 +1,14 @@
-function getDeckLength(deck: any): number {
-  let deckLength: number = 0;
+import { Deck } from "@/types";
 
-  for (const deckType in deck) {
-    if (Array.isArray(deck[deckType])) {
-      deckLength += deck[deckType].length;
-    }
+function getDeckLength(deck: Deck): number {
+  let deckLength = 0;
+
+  const zones: (keyof Deck)[] = ["main", "extra", "side"];
+
+  for (const zone of zones) {
+    deckLength += deck[zone].length;
   }
+
   return deckLength;
 }
 

@@ -1,11 +1,11 @@
 "use server";
 
-import { connect } from "@/lib/dbConnection";
-import Users from "@/models/usersModel";
+import db from "@/lib/database/db";
+import Users from "@/lib/database/models/users.model";
 
 async function getUserFavs(userId: string) {
   try {
-    await connect();
+    await db();
 
     const currentUser = await Users.findById(userId).select("favs");
 
@@ -14,8 +14,8 @@ async function getUserFavs(userId: string) {
     } else {
       return null;
     }
-  } catch (e: any) {
-    throw new Error(`failed to get user favs : ${e.message}`);
+  } catch (e) {
+    throw new Error(`failed to get user favs : ${(e as Error).message}`);
   }
 }
 

@@ -59,7 +59,7 @@ export default function YugiCard({
         <span
           className={`${
             !selected ? "hidden" : ""
-          } absolute top-[40%] left-[37%] z-50 bg-slate-200 rounded-full h-8 w-8 grid place-content-center font-semibold`}>
+          } absolute top-[40%] left-[37%] z-50 bg-neutral-950 text-slate-100 rounded-full h-8 w-8 grid place-content-center font-semibold`}>
           {selected}
         </span>
       )}

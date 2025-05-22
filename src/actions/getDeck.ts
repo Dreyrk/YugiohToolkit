@@ -1,21 +1,20 @@
 "use server";
 
-import { connect } from "@/lib/dbConnection";
-import Users from "@/models/usersModel";
+import db from "@/lib/database/db";
+import Users from "@/lib/database/models/users.model";
 import { Deck } from "@/types";
 
 async function getDeck(userId: string, deckId: string) {
   try {
-    await connect();
+    await db();
+
     const currentUser = await Users.findById(userId);
 
-    const currentUserDeck = currentUser.decks.find(
-      (deck: Deck) => deck.id === deckId
-    );
+    const currentUserDeck = currentUser.decks.find((deck: Deck) => deck.id === deckId);
 
     return currentUserDeck;
-  } catch (e: any) {
-    throw new Error(`failed to get deck ${deckId} : ${e.message}`);
+  } catch (e) {
+    throw new Error(`failed to get deck ${deckId} : ${(e as Error).message}`);
   }
 }
 

@@ -1,22 +1,19 @@
 "use server";
 
-import { connect } from "@/lib/dbConnection";
-import Users from "@/models/usersModel";
+import db from "@/lib/database/db";
+import Users from "@/lib/database/models/users.model";
 import { YugiCards } from "@/types";
-import { revalidatePath } from "next/cache";
 
 async function removeFavCard(userId: string, card: YugiCards) {
   try {
-    await connect();
+    await db();
 
     const currentUser = await Users.findById(userId);
 
-    currentUser.favs = currentUser.favs.filter(
-      (currCard: YugiCards) => currCard.id !== card.id
-    );
+    currentUser.favs = currentUser.favs.filter((currCard: YugiCards) => currCard.id !== card.id);
     await currentUser.save();
-  } catch (e: any) {
-    throw new Error(`Failed to remove favorite card : ${e.message}`);
+  } catch (e) {
+    throw new Error(`Failed to remove favorite card : ${(e as Error).message}`);
   }
 }
 

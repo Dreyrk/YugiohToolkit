@@ -4,7 +4,16 @@ import { getSession } from "@/actions/auth/getSession";
 import { invalidateSession } from "@/actions/auth/invalidateSession";
 
 export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
   const session = await getSession();
+
+  if (pathname.startsWith("/profile")) {
+    if (!session.user || session.error) {
+      NextResponse.redirect(new URL("/", request.url));
+    } else {
+      NextResponse.next();
+    }
+  }
 
   if (session.invalidate) {
     await invalidateSession();

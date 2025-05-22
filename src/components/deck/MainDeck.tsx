@@ -15,23 +15,11 @@ export default function MainDeck({ allCards }: DeckProps) {
       <div className="deck-display">
         {deck.main &&
           deck.main.map((card: YugiCards, i: number) => (
-            <YugiCard
-              deckType="main"
-              inDeck={true}
-              card={card}
-              key={card.id + i}
-            />
+            <YugiCard deckType="main" inDeck={true} card={card} key={card.id + i} />
           ))}
         <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-      {isOpen && (
-        <AddToDeckModal
-          allCards={allCards}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          deckType="main"
-        />
-      )}
+      {isOpen && <AddToDeckModal allCards={allCards} isOpen={isOpen} setIsOpen={setIsOpen} deckType="main" />}
     </section>
   );
 }

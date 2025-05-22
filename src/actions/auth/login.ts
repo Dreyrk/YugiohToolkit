@@ -9,16 +9,14 @@ import db from "@/lib/database/db";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
-  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères"),
+  password: z.string().min(6, "Le mot de passe est incorrect"),
 });
 
 export async function login(formData: FormData) {
   const cookieStore = await cookies();
   try {
-    // Établir la connexion à la base
     await db();
 
-    // Extraire et valider les données
     const data = {
       email: formData.get("email")?.toString(),
       password: formData.get("password")?.toString(),
@@ -51,7 +49,6 @@ export async function login(formData: FormData) {
     const session = await lucia.createSession(user._id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
 
-    // Définir le cookie
     cookieStore.set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
 
     return { success: true };
