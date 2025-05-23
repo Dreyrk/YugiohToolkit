@@ -10,12 +10,17 @@ export default async function Page() {
     return redirect("/auth");
   } else {
     return (
-      <div className="p-8 flex flex-col gap-10 items-center">
+      <div className="p-8 flex flex-col gap-10 items-center max-w-sm">
         <h1 className="text-slate-200 text-3xl text-center">
           Bienvenue <span className="font-bold text-white">{session?.user.pseudo}</span> !
         </h1>
         <p className="text-white font-light text-sm">{session?.user.email}</p>
-        <div className="flex gap-12">
+        <div className="flex flex-wrap justify-center items-center gap-6">
+          <Link
+            className="text-lg font-semibold py-2 px-4 text-center bg-neutral-800 rounded-lg text-slate-200 shadow-sm shadow-neutral-600 hover:scale-95"
+            href={`/profile/${session?.user.id}/cards`}>
+            Collections
+          </Link>
           <Link
             className="text-lg font-semibold py-2 px-4 text-center bg-neutral-800 rounded-lg text-slate-200 shadow-sm shadow-neutral-600 hover:scale-95"
             href={`/profile/${session?.user.id}/decks`}>

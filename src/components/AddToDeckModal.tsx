@@ -72,12 +72,14 @@ export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToD
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClose={closeModal}
+      onClick={closeModal}
       className="fixed inset-0 z-50 flex items-center justify-center h-screen w-screen modal-overlay backdrop-blur-sm">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.3 }}
+        onClick={(e) => e.stopPropagation()}
         className="bg-neutral-700 text-slate-100 max-w-[950px] w-[90vw] max-h-[85vh] p-6 flex flex-col justify-between rounded-lg shadow-lg overflow-hidden relative">
         <button
           onClick={closeModal}
