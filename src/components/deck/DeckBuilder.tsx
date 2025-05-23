@@ -1,6 +1,6 @@
 "use client";
 
-import { SessionUser, YugiCards } from "@/types";
+import { SessionUser } from "@/types";
 import ExtraDeck from "./ExtraDeck";
 import MainDeck from "./MainDeck";
 import SideDeck from "./SideDeck";
@@ -11,17 +11,7 @@ import getDeckLength from "@/utils/getDeckLength";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { toast } from "react-toastify";
 
-export default function DeckBuilder({
-  mainCards,
-  extraCards,
-  sideCards,
-  user,
-}: {
-  mainCards: YugiCards[] | null;
-  extraCards: YugiCards[] | null;
-  sideCards: YugiCards[] | null;
-  user: SessionUser | null;
-}) {
+export default function DeckBuilder({ user }: { user: SessionUser | null }) {
   const { deck, dispatch } = useDeckContext();
   const [, , deleteStoredValue] = useLocalStorage("deck");
 
@@ -62,9 +52,9 @@ export default function DeckBuilder({
           </span>
         </button>
       </div>
-      {mainCards && <MainDeck allCards={mainCards} />}
-      {extraCards && <ExtraDeck allCards={extraCards} />}
-      {sideCards && <SideDeck allCards={sideCards} />}
+      <MainDeck />
+      <ExtraDeck />
+      <SideDeck />
       <div>
         <p className="text-white text-lg font-medium">
           Deck Length: <span className={`text-${deckLength < 40 && "red-600"}`}>{deckLength}</span>

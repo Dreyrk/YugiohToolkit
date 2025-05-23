@@ -3,11 +3,11 @@
 import { useState } from "react";
 import AddCardBtn from "../AddCardBtn";
 import AddToDeckModal from "../AddToDeckModal";
-import { DeckProps, YugiCards } from "@/types";
+import { YugiCards } from "@/types";
 import YugiCard from "../cards/YugiCard";
 import useDeckContext from "@/context/DeckContext";
 
-export default function SideDeck({ allCards }: DeckProps) {
+export default function SideDeck() {
   const { deck } = useDeckContext();
   const [isOpen, setIsOpen] = useState(false);
   return (
@@ -15,23 +15,11 @@ export default function SideDeck({ allCards }: DeckProps) {
       <div className="deck-display">
         {deck.side &&
           deck.side.map((card: YugiCards, i: number) => (
-            <YugiCard
-              card={card}
-              deckType="side"
-              inDeck={true}
-              key={card.id + i}
-            />
+            <YugiCard card={card} deckType="side" inDeck={true} key={card.id + i} />
           ))}
         <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-      {isOpen && (
-        <AddToDeckModal
-          allCards={allCards}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          deckType="side"
-        />
-      )}
+      {isOpen && <AddToDeckModal isOpen={isOpen} setIsOpen={setIsOpen} deckType="side" />}
     </section>
   );
 }

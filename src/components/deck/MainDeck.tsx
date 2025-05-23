@@ -3,11 +3,11 @@
 import { useState } from "react";
 import AddCardBtn from "../AddCardBtn";
 import AddToDeckModal from "../AddToDeckModal";
-import { DeckProps, YugiCards } from "@/types";
+import { YugiCards } from "@/types";
 import YugiCard from "../cards/YugiCard";
 import useDeckContext from "@/context/DeckContext";
 
-export default function MainDeck({ allCards }: DeckProps) {
+export default function MainDeck() {
   const [isOpen, setIsOpen] = useState(false);
   const { deck } = useDeckContext();
   return (
@@ -19,7 +19,7 @@ export default function MainDeck({ allCards }: DeckProps) {
           ))}
         <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
       </div>
-      {isOpen && <AddToDeckModal allCards={allCards} isOpen={isOpen} setIsOpen={setIsOpen} deckType="main" />}
+      {isOpen && <AddToDeckModal isOpen={isOpen} setIsOpen={setIsOpen} deckType="main" />}
     </section>
   );
 }
