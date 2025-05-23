@@ -1,60 +1,86 @@
 "use client";
 
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState, useDeferredValue } from "react";
 import { motion } from "framer-motion";
 import { AiOutlineCloseCircle, AiFillCheckCircle } from "react-icons/ai";
 import useDeckContext from "@/context/DeckContext";
-import { AddToDeckModalProps, YugiCards } from "@/types";
+import { AddToDeckModalProps, CardFiltersQuery, YugiCards } from "@/types";
 import YugiCard from "./cards/YugiCard";
 import Loader from "./Loader";
 import FiltersBar from "./FiltersBar";
 
-export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToDeckModalProps) {
+export default function AddToDeckModal({ setIsOpen, deckType }: AddToDeckModalProps) {
   const listRef = useRef<HTMLUListElement>(null);
   const { deck, dispatch } = useDeckContext();
   const [selectedCards, setSelectedCards] = useState(deck[deckType]);
-  const [displayedCards, setDisplayedCards] = useState<YugiCards[]>(allCards.slice(0, 60));
-  const [visibleCardCount, setVisibleCardCount] = useState(12);
-  const [search, setSearch] = useState("");
-  const deferredSearch = useDeferredValue(search);
+  const [displayedCards, setDisplayedCards] = useState<YugiCards[]>([]);
 
-  useMemo(() => {
-    const searchedCards = allCards
-      .filter((card) => card.name.toLowerCase().includes(deferredSearch.toLowerCase()))
-      .slice(0, 60);
-    setDisplayedCards(searchedCards);
-  }, [deferredSearch, allCards]);
+  const emptyFilters = {
+    search: "",
+    page: 1,
+    limit: 60,
+    deckType,
+    types: [],
+  };
+  const [filters, setFilters] = useState<CardFiltersQuery>(emptyFilters);
+
+  const deferredSearch = useDeferredValue(filters.search);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    const fetchCards = async () => {
+      setIsLoading(true);
+      try {
+        const params = new URLSearchParams();
+        Object.entries(filters).forEach(([key, value]) => {
+          if (Array.isArray(value)) {
+            params.append(key, value.join(","));
+          } else {
+            params.append(key, String(value));
+          }
+        });
+        const res = await fetch(`/api/cards?${params.toString()}`);
+        const data = await res.json();
+        setDisplayedCards((prev) => (filters.page === 1 ? data : [...prev, ...data]));
+        setHasMore(data.length === filters.limit);
+      } catch (err) {
+        console.error("Failed to fetch cards:", err);
+      }
+      setIsLoading(false);
+    };
+
+    fetchCards();
+  }, [filters]);
+
+  // Scroll infini
+  useEffect(() => {
     const list = listRef.current;
-    const loadMoreCards = () => {
-      const nextBatch = displayedCards.slice(visibleCardCount, visibleCardCount * 4);
-      setDisplayedCards([...displayedCards, ...nextBatch]);
-      setVisibleCardCount(visibleCardCount + 10);
-    };
-
     const handleScroll = () => {
-      if (list) {
-        if (list.scrollTop + 20 >= list.scrollHeight - list.clientHeight) {
-          loadMoreCards();
-        }
+      if (!list || isLoading || !hasMore) return;
+      if (list.scrollTop + 20 >= list.scrollHeight - list.clientHeight) {
+        setFilters((prev) => ({ ...prev, page: prev.page + 1 }));
       }
     };
 
-    if (list) {
-      list.addEventListener("scroll", handleScroll);
-    }
+    list?.addEventListener("scroll", handleScroll);
+    return () => list?.removeEventListener("scroll", handleScroll);
+  }, [isLoading, hasMore]);
 
-    return () => {
-      if (list) {
-        list.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, [displayedCards, listRef, visibleCardCount]);
+  // Réinitialiser à la recherche
+  useEffect(() => {
+    setFilters((prev) => ({ ...prev, search: deferredSearch, page: 1 }));
+    setDisplayedCards([]);
+    setHasMore(true);
+  }, [deferredSearch]);
 
-  const closeModal = () => {
-    setIsOpen(false);
+  const handleFilterChange = (newFilters: Partial<typeof filters>) => {
+    setFilters((prev) => ({ ...prev, ...newFilters, page: 1 }));
+    setDisplayedCards([]);
+    setHasMore(true);
   };
+
+  const closeModal = () => setIsOpen(false);
 
   const addToDeck = () => {
     if (deckType === "main" || deckType === "extra" || deckType === "side") {
@@ -80,7 +106,7 @@ export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToD
         exit={{ opacity: 0, scale: 0.8 }}
         transition={{ duration: 0.3 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-neutral-700 text-slate-100 max-w-[950px] w-[90vw] max-h-[85vh] p-6 flex flex-col justify-between rounded-lg shadow-lg overflow-hidden relative">
+        className="bg-neutral-700 text-slate-100 max-w-[950px] w-[90vw] h-[85vh] p-6 flex flex-col justify-between rounded-lg shadow-lg overflow-hidden relative">
         <button
           onClick={closeModal}
           type="button"
@@ -110,27 +136,24 @@ export default function AddToDeckModal({ setIsOpen, deckType, allCards }: AddToD
             id="search"
             type="text"
             placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={filters.search}
+            onChange={(e) => setFilters((prev: CardFiltersQuery) => ({ ...prev, search: e.target.value }))}
             autoComplete="off"
             className="w-5/6 rounded-md p-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           />
-          <FiltersBar cards={allCards} setCards={setDisplayedCards} />
+          <FiltersBar filters={filters} onChange={(filters) => handleFilterChange(filters)} />
         </div>
 
         <ul
           ref={listRef}
           className={`z-30 h-full w-full overflow-y-auto overflow-x-hidden grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 scrollbar-${deckType}`}>
-          {allCards ? (
-            displayedCards.map((card, i) => (
-              <li key={card.id + i} className="m-0">
-                <YugiCard selectedCards={selectedCards} setSelectedCards={setSelectedCards} card={card} />
-              </li>
-            ))
-          ) : (
-            <Loader />
-          )}
+          {displayedCards.map((card, i) => (
+            <li key={card.id + i} className="m-0">
+              <YugiCard selectedCards={selectedCards} setSelectedCards={setSelectedCards} card={card} />
+            </li>
+          ))}
         </ul>
+        {isLoading && <Loader />}
       </motion.div>
     </motion.dialog>
   );

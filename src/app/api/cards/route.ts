@@ -4,10 +4,11 @@ import Cards from "@/lib/database/models/cards.model";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const deckType = searchParams.get("deckType");
-  const search = searchParams.get("search") || "";
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "60");
+  const deckType = searchParams.get("deckType")?.trim();
+  const types = searchParams.get("types");
+  const search = searchParams.get("search")?.trim() || "";
+  const page = Number(searchParams.get("page") || "1");
+  const limit = Number(searchParams.get("limit") || "60");
 
   try {
     await db();
@@ -15,6 +16,14 @@ export async function GET(req: Request) {
     const query = {
       ...(deckType && { deckType }),
       ...(search && { name: { $regex: new RegExp(search, "i") } }),
+      ...(types && {
+        type: {
+          $in: types
+            .split(",")
+            .map((t) => t.trim())
+            .filter(Boolean),
+        },
+      }),
     };
 
     const cards = await Cards.find(query)

@@ -51,7 +51,6 @@ interface isOpenStateProps {
 
 export interface AddToDeckModalProps extends isOpenStateProps {
   deckType: DeckType;
-  allCards: YugiCards[];
 }
 
 export interface AuthProps {
@@ -155,9 +154,17 @@ export interface FavoriteBtnProps {
 //   isFav: boolean;
 // }
 
+export interface CardFiltersQuery {
+  search: string;
+  page: number;
+  limit: number;
+  deckType: string;
+  types: string[];
+}
+
 export interface FiltersBarProps {
-  cards: YugiCards[];
-  setCards: Dispatch<SetStateAction<YugiCards[]>>;
+  filters: CardFiltersQuery;
+  onChange: (filters: Partial<CardFiltersQuery>) => void;
 }
 
 export type DeckAction =
