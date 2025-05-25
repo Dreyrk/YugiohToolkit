@@ -1,9 +1,8 @@
-import { YugiCards } from "@/types";
+import { CollectionYugiCard, YugiCards } from "@/types";
 
 export default function countCards(
-  card: YugiCards,
-  cards: YugiCards[]
+  card: YugiCards | CollectionYugiCard,
+  cards: YugiCards[] | CollectionYugiCard[]
 ): number {
-  return cards.filter((currentCard: YugiCards) => currentCard.id === card.id)
-    .length;
+  return cards.filter((currentCard: YugiCards | CollectionYugiCard) => currentCard.id === card.id).length;
 }

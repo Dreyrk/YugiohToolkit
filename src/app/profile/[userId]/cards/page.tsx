@@ -1,8 +1,14 @@
-export default async function Page() {
+import CardCollection from "@/components/CardCollection";
+import { CardsSkeleton } from "@/components/cards/CardSkeleton";
+import { Suspense } from "react";
+
+export default function Page() {
   return (
-    <>
-      <h1 className="mx-auto w-fit mt-4 font-bold text-slate-100 text-4xl">Collections</h1>
-      <div className="grid grid-cols-6 place-items-center gap-8">{/* map des Collections */}</div>
-    </>
+    <div className="container mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6 text-secondary">Card Collection Manager</h1>
+      <Suspense fallback={<CardsSkeleton />}>
+        <CardCollection />
+      </Suspense>
+    </div>
   );
 }

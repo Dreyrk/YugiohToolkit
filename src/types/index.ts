@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import { ChangeEvent, Dispatch, FocusEvent, SetStateAction } from "react";
 import { IconType } from "react-icons";
 
@@ -148,12 +149,6 @@ export interface FavoriteBtnProps {
   type: "button" | "submit" | "reset";
 }
 
-// export interface DetailsDisplayProps {
-//   session: Session | null;
-//   card: YugiCards;
-//   isFav: boolean;
-// }
-
 export interface CardFiltersQuery {
   search: string;
   page: number;
@@ -172,3 +167,33 @@ export type DeckAction =
   | { type: "CHANGE_NAME"; payload: { name: string } }
   | { type: "ADD_CARD"; payload: { cards: YugiCards[]; deckType: DeckType } }
   | { type: "REMOVE_CARD"; payload: { cardId: string | number; deckType: DeckType } };
+
+export interface CollectionYugiCard {
+  _id?: string;
+  id: number;
+  name: string;
+  desc: string;
+  atk?: number;
+  def?: number;
+  type: string;
+  race?: string;
+  attribute?: string;
+  price: number;
+  img: string;
+  deckType: string;
+  duplicate?: boolean;
+}
+
+export interface Collection {
+  _id?: Types.ObjectId;
+  id: string;
+  name: string;
+  description?: string;
+  cards: CollectionYugiCard[];
+}
+export interface CollectionYugiCardProps {
+  card: CollectionYugiCard;
+  selectedCards?: CollectionYugiCard[];
+  setSelectedCards?: React.Dispatch<React.SetStateAction<CollectionYugiCard[]>>;
+  onCardSelect?: (card: CollectionYugiCard) => void;
+}
