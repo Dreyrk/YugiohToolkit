@@ -185,7 +185,7 @@ export interface CollectionYugiCard {
 }
 
 export interface Collection {
-  _id?: Types.ObjectId;
+  _id: Types.ObjectId | string;
   id: string;
   name: string;
   description?: string;
@@ -196,4 +196,7 @@ export interface CollectionYugiCardProps {
   selectedCards?: CollectionYugiCard[];
   setSelectedCards?: React.Dispatch<React.SetStateAction<CollectionYugiCard[]>>;
   onCardSelect?: (card: CollectionYugiCard) => void;
+  onRemoveCard?: (card: CollectionYugiCard) => void;
+  isEditMode?: boolean;
+  showSelectionCounter?: boolean;
 }

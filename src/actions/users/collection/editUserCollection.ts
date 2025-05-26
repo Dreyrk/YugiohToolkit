@@ -5,7 +5,7 @@ import db from "@/lib/database/db";
 import Users from "@/lib/database/models/users.model";
 import { Collection } from "@/types";
 
-export async function editCollection(collectionUpdated: Collection) {
+export default async function editCollection(collectionUpdated: Omit<Collection, "_id">) {
   try {
     const session = await getSession();
     if (!session?.user?.id) {

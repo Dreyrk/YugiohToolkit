@@ -5,7 +5,7 @@ import db from "@/lib/database/db";
 import Users from "@/lib/database/models/users.model";
 import { Collection } from "@/types";
 
-export async function deleteUserCollection(collectionId: string) {
+export default async function deleteUserCollection(collectionId: string) {
   try {
     const session = await getSession();
     if (!session?.user?.id) {

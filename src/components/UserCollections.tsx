@@ -1,14 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Types } from "mongoose";
 import { toast } from "react-toastify";
-import { Pencil, Trash2, Plus, ChevronRight } from "lucide-react";
+import { Pencil, Trash2, Plus } from "lucide-react";
 import type { Collection } from "@/types";
 import getUserCollections from "@/actions/users/collection/getUserCollections";
-import { editCollection } from "@/actions/users/collection/editUserCollection";
-import { deleteUserCollection } from "@/actions/users/collection/deleteUserCollection";
+import editCollection from "@/actions/users/collection/editUserCollection";
+import deleteUserCollection from "@/actions/users/collection/deleteUserCollection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -23,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import YugiCard from "./cards/CollectionYugiCard";
+import createNewUserCollection from "@/actions/users/collection/createNewUserCollection";
 
 export default function UserCollections() {
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -33,6 +34,8 @@ export default function UserCollections() {
   const [newCollectionDescription, setNewCollectionDescription] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+
+  const pathname = usePathname();
 
   useEffect(() => {
     fetchCollections();
@@ -59,13 +62,20 @@ export default function UserCollections() {
 
     try {
       const newCollection = {
-        id: new Types.ObjectId().toString(),
         name: newCollectionName,
         description: newCollectionDescription,
         cards: [],
       };
 
-      setCollections((prev) => [...prev, newCollection]);
+      const { id } = await createNewUserCollection(newCollection);
+
+      const newCompleteCollection: Collection = {
+        ...newCollection,
+        id,
+        _id: id,
+      };
+
+      setCollections((prev) => [...prev, newCompleteCollection]);
 
       setNewCollectionName("");
       setNewCollectionDescription("");
@@ -130,17 +140,6 @@ export default function UserCollections() {
     }
   };
 
-  const handleEditClick = (collection: Collection) => {
-    setSelectedCollection(collection);
-    setNewCollectionName(collection.name);
-    setNewCollectionDescription(collection.description || "");
-    setIsEditing(true);
-  };
-
-  const handleViewCollection = (collection: Collection) => {
-    setSelectedCollection(collection);
-  };
-
   if (isLoading) {
     return (
       <div className="space-y-4">
@@ -159,54 +158,6 @@ export default function UserCollections() {
             </CardContent>
           </Card>
         ))}
-      </div>
-    );
-  }
-
-  if (selectedCollection) {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Button variant="ghost" className="flex items-center gap-1" onClick={() => setSelectedCollection(null)}>
-            <ChevronRight className="h-4 w-4 rotate-180" />
-            Back to Collections
-          </Button>
-
-          <Button variant="outline" size="sm" onClick={() => handleEditClick(selectedCollection)}>
-            <Pencil className="h-4 w-4 mr-2" />
-            Edit Collection
-          </Button>
-        </div>
-
-        <div>
-          <h2 className="text-2xl font-bold">{selectedCollection.name}</h2>
-          {selectedCollection.description && (
-            <p className="text-muted-foreground mt-1">{selectedCollection.description}</p>
-          )}
-          <p className="text-sm text-muted-foreground mt-2">
-            {selectedCollection.cards.length} card{selectedCollection.cards.length !== 1 ? "s" : ""} in collection
-          </p>
-        </div>
-
-        {selectedCollection.cards.length === 0 ? (
-          <div className="text-center py-12 border rounded-lg">
-            <p className="text-muted-foreground">No cards in this collection yet.</p>
-            <Button className="mt-4">Browse Cards to Add</Button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
-            {selectedCollection.cards.map((card, index) => (
-              <div key={`${card.id}-${index}`} className="relative">
-                <YugiCard card={card} />
-                {card.duplicate && (
-                  <div className="absolute top-0 right-0 bg-primary text-primary-foreground text-xs px-1.5 py-0.5 rounded-bl z-50">
-                    Duplicate
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
       </div>
     );
   }
@@ -255,11 +206,11 @@ export default function UserCollections() {
       </div>
 
       {collections.length === 0 ? (
-        <div className="text-center py-12 border rounded-lg">
-          <p className="text-muted-foreground">Pas encore de collection.</p>
+        <div className="text-center py-12">
+          <p className="text-secondary">Pas encore de collection.</p>
           <Button className="mt-4" onClick={() => setIsCreating(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Create Your First Collection
+            Créer sa première collection
           </Button>
         </div>
       ) : (
@@ -275,10 +226,12 @@ export default function UserCollections() {
                     </CardDescription>
                   </div>
                   <div className="flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => handleEditClick(collection)}>
-                      <Pencil className="h-4 w-4" />
-                      <span className="sr-only">Modifier</span>
-                    </Button>
+                    <Link href={`${pathname}/${collection.id}?edit=true`}>
+                      <Button variant="ghost" size="icon">
+                        <Pencil className="h-4 w-4" />
+                        <span className="sr-only">Modifier</span>
+                      </Button>
+                    </Link>
                     <Button variant="ghost" size="icon" onClick={() => handleDeleteCollection(collection.id)}>
                       <Trash2 className="h-4 w-4" />
                       <span className="sr-only">Supprimer</span>
@@ -291,14 +244,9 @@ export default function UserCollections() {
                   <p className="text-sm text-muted-foreground mb-2">{collection.description}</p>
                 )}
                 <div className="flex space-x-2 overflow-x-auto pb-2">
-                  {collection.cards.slice(0, 5).map((card) => (
-                    <div key={card.id} className="w-20 h-28 flex-shrink-0 relative rounded overflow-hidden">
-                      <Image
-                        src={card.img || "/placeholder.svg?height=112&width=80"}
-                        alt={card.name}
-                        fill
-                        className="object-cover"
-                      />
+                  {collection.cards.slice(0, 5).map((card, i) => (
+                    <div key={`${card.id}-${i}`} className="w-20 h-28 flex-shrink-0 relative rounded overflow-hidden">
+                      <Image src={card.img || "/assets/cardBack.jpg"} alt={card.name} fill className="object-cover" />
                     </div>
                   ))}
                   {collection.cards.length > 5 && (
@@ -309,9 +257,11 @@ export default function UserCollections() {
                 </div>
               </CardContent>
               <CardFooter className="pt-0">
-                <Button variant="outline" className="w-full" onClick={() => handleViewCollection(collection)}>
-                  Voir Collection
-                </Button>
+                <Link href={`${pathname}/${collection.id || collection._id}`}>
+                  <Button variant="outline" className="w-full">
+                    Voir Collection
+                  </Button>
+                </Link>
               </CardFooter>
             </Card>
           ))}

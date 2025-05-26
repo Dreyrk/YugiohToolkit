@@ -23,7 +23,9 @@ export default async function getUserCollections(): Promise<Collection[]> {
       throw new Error("User not found");
     }
 
-    const collections: Collection[] = user.collections.map((collection: any) => ({
+    const collections: Collection[] = user.collections.map((collection: Collection) => ({
+      ...collection,
+      _id: collection._id.toString(),
       id: collection._id.toString(),
       name: collection.name,
       description: collection.description,

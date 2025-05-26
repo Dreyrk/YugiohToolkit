@@ -28,7 +28,7 @@ interface CollectionManagerProps {
 }
 
 export default function CollectionManager({ selectedCards, onComplete }: CollectionManagerProps) {
-  const [collections, setCollections] = useState<Collection[]>([]);
+  const [collections, setCollections] = useState<Omit<Collection, "_id">[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState("");
   const [isCreatingNew, setIsCreatingNew] = useState(false);
@@ -76,7 +76,7 @@ export default function CollectionManager({ selectedCards, onComplete }: Collect
           return;
         }
 
-        const newCollection: Omit<Collection, "id"> = {
+        const newCollection: Omit<Collection, "_id" | "id"> = {
           name: newCollectionName.trim(),
           description: newCollectionDescription.trim(),
           cards: selectedCards,

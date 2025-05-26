@@ -10,7 +10,7 @@ export default function Navbar({ user }: { user: SessionUser | null }) {
   return (
     <header className="w-full absolute z-10">
       <nav className="max-w-[1440px] mx-auto flex justify-between items-center px-6 py-4">
-        <Link className="grid place-content-center mb-2 sm:mb-0" href="/" replace={true}>
+        <Link className="grid place-content-center" href="/" replace={true}>
           <Image src="/assets/millenium-puzzle.png" alt="puzzle" width={80} height={80} />
         </Link>
         <h1 className="text-white text-5xl text-center font-semibold">Deck Builder</h1>

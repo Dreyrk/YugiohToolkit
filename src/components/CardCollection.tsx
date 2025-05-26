@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -118,7 +119,13 @@ export default function CardCollection() {
             </div>
           )}
 
-          <CollectionCardGrid cards={cards} selectedCards={selectedCards} onCardSelect={handleCardSelect} />
+          <CollectionCardGrid
+            cards={cards}
+            selectedCards={selectedCards}
+            onCardSelect={handleCardSelect}
+            isLoading={isLoading}
+            showSelectionCounter={true}
+          />
 
           {hasMore && (
             <div className="flex justify-center mt-6">
