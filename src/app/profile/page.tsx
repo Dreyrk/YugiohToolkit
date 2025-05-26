@@ -10,7 +10,7 @@ export default async function Page() {
     return redirect("/auth");
   } else {
     return (
-      <div className="p-8 flex flex-col gap-10 items-center max-w-sm">
+      <div className="max-w-sm mx-auto p-8 flex flex-col gap-10 items-center">
         <h1 className="text-slate-200 text-3xl text-center">
           Bienvenue <span className="font-bold text-white">{session?.user.pseudo}</span> !
         </h1>
@@ -18,7 +18,7 @@ export default async function Page() {
         <div className="flex flex-wrap justify-center items-center gap-6">
           <Link
             className="text-lg font-semibold py-2 px-4 text-center bg-neutral-800 rounded-lg text-slate-200 shadow-sm shadow-neutral-600 hover:scale-95"
-            href={`/profile/${session?.user.id}/cards`}>
+            href={`/profile/${session?.user.id}/collections`}>
             Collections
           </Link>
           <Link

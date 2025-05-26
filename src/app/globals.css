@@ -53,7 +53,7 @@
 
 .layout-main {
   min-height: calc(100dvh - 142px);
-  padding-top: 114px; /*  taille du header  */
+  @apply max-sm:pt-[128px] pt-[114px];
 }
 
 footer {

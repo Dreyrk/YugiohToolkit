@@ -26,7 +26,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           newestOnTop={false}
           closeOnClick
           rtl={false}
-          pauseOnFocusLoss
           pauseOnHover
           theme="dark"
         />
