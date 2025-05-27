@@ -200,3 +200,7 @@ export interface CollectionYugiCardProps {
   isEditMode?: boolean;
   showSelectionCounter?: boolean;
 }
+
+export type AddCardBtnProps = {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};

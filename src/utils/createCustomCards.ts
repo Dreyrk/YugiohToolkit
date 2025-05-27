@@ -1,19 +1,17 @@
 import { YugiCards, FetchedCards, CardPrices } from "../types/index";
 
-function getAvgPrice(prices: CardPrices): any {
-  const currentPrice: any = Object.values(prices);
+function getAvgPrice(prices: CardPrices): number {
+  const currentPrices = Object.values(prices);
 
-  const avg: number =
-    currentPrice
-      .map((el: string) => parseFloat(el))
-      .reduce((prev: number, curr: number): number => (prev as number) + (curr as number)) /
-    parseFloat(currentPrice.length);
+  const sum = currentPrices.map((price) => parseFloat(price)).reduce((prev, curr) => prev + curr, 0);
 
-  return avg.toFixed(2);
+  const avg = sum / currentPrices.length;
+
+  return parseFloat(avg.toFixed(2));
 }
 
-function createCustomCards(cards: FetchedCards[], deckType: string | null) {
-  const cleanCards = cards.map((card: FetchedCards): YugiCards => {
+function createCustomCards(cards: FetchedCards[], deckType: string | null): YugiCards[] {
+  const cleanCards: YugiCards[] = cards.map((card) => {
     return {
       id: card.id,
       name: card.name,
