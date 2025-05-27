@@ -27,10 +27,12 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
     <div className="text-white pt-8">
       <div className="flex flex-wrap px-6">
         <h1 className="font-bold text-3xl basis-1/2">{deck.name}</h1>
-        <form action={deleteUserDeck} className="basis-1/2 flex justify-end">
+        <div className="basis-1/2 flex justify-end">
           <EditDeckBtn type="button" />
-          <DeleteDeckBtn type="submit" />
-        </form>
+          <form action={deleteUserDeck}>
+            <DeleteDeckBtn type="submit" />
+          </form>
+        </div>
         <p className="shrink">Deck length: {deckLength}</p>
       </div>
       <DeckDisplayer deck={deck} />

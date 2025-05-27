@@ -7,13 +7,15 @@ import { YugiCards } from "@/types";
 import YugiCard from "../cards/YugiCard";
 import useDeckContext from "@/context/DeckContext";
 
-export default function MainDeck() {
+export default function MainDeck({ isMounted }: { isMounted: boolean }) {
   const [isOpen, setIsOpen] = useState(false);
   const { deck } = useDeckContext();
+
   return (
     <section className="main-deck">
       <div className="deck-display">
-        {deck.main &&
+        {isMounted &&
+          deck.main &&
           deck.main.map((card: YugiCards, i: number) => (
             <YugiCard deckType="main" inDeck={true} card={card} key={card.id + i} />
           ))}

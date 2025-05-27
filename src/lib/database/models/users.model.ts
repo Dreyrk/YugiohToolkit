@@ -1,8 +1,8 @@
 import { Schema, model, models } from "mongoose";
 
 export const CardSchema = new Schema({
-  id: { type: Number },
-  name: { type: String },
+  id: { type: String },
+  name: { type: String, required: true },
   desc: { type: String },
   atk: { type: Number },
   def: { type: Number },

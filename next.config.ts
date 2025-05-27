@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "images.ygoprodeck.com",
       },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
   },
 };

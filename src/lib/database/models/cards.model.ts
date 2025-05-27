@@ -8,11 +8,6 @@ const SessionUserSchema = new Schema({
 
 const CardSchema = new Schema(
   {
-    id: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
     name: {
       type: String,
       required: true,
@@ -73,11 +68,16 @@ const CardSchema = new Schema(
   {
     timestamps: true,
     collection: "cards",
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        ret.id = ret._id; // Crée un champ `id` à partir de `_id`
+        delete ret._id; // Supprime `_id` pour éviter la redondance
+        delete ret.__v; // Supprime le champ de version de Mongoose
+      },
+    },
   }
 );
-
-// Index pour optimiser les recherches par ID
-CardSchema.index({ id: 1 });
 
 const Cards = models.Cards || model("Cards", CardSchema);
 

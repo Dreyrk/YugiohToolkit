@@ -5,6 +5,7 @@ import { YugiCardProps, YugiCards } from "@/types";
 import Image from "next/image";
 import RemoveCardBtn from "../RemoveCardBtn";
 import countCards from "@/utils/countCards";
+import { cn } from "@/lib/utils";
 
 export default function YugiCard({
   card,
@@ -43,7 +44,7 @@ export default function YugiCard({
       onClick={isInteractive ? selectCard : undefined}
       role={isInteractive ? "button" : undefined}
       tabIndex={isInteractive ? 0 : undefined}
-      className={`relative ${isInteractive ? "hover:scale-95 cursor-pointer" : "cursor-default"}`}
+      className={cn(`relative`, isInteractive ? "hover:scale-95 cursor-pointer" : "cursor-default")}
       onKeyDown={
         isInteractive
           ? (e) => {
@@ -63,7 +64,15 @@ export default function YugiCard({
           {selected}
         </span>
       )}
-      <Image className="z-40" src={card.img ? card.img : "/assets/cardBack.jpg"} alt="card" width={180} height={260} />
+      <Image
+        className="z-40"
+        src={card.img}
+        placeholder="blur"
+        blurDataURL="/assets/cardBack.jpg"
+        alt="card"
+        width={180}
+        height={260}
+      />
     </div>
   );
 }

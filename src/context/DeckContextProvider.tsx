@@ -27,7 +27,7 @@ function deckReducer(deck: Deck, action: DeckAction): Deck {
       if (!["main", "extra", "side"].includes(deckType)) {
         return deck;
       }
-      return { ...deck, [deckType]: [...deck[deckType], ...cards] };
+      return { ...deck, [deckType]: cards };
     }
 
     case "REMOVE_CARD": {

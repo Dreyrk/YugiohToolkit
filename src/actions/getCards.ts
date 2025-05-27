@@ -13,7 +13,7 @@ export default async function getCards(type: string): Promise<YugiCards[] | null
       query = { deckType: type };
     }
 
-    const cards = await Cards.find(query).lean().select("-__v").exec();
+    const cards = await Cards.find(query);
 
     const formattedCards: YugiCards[] = cards.map((card) => ({
       id: card.id,

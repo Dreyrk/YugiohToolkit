@@ -1,11 +1,9 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import db from "@/lib/database/db";
 import Cards from "@/lib/database/models/cards.model";
 import { SessionUser, YugiCards } from "@/types";
 import { getSession } from "./auth/getSession";
-
 interface CardDataType extends YugiCards {
   createdBy: SessionUser | string;
 }
@@ -17,17 +15,11 @@ export async function createCard(prevState: { success: boolean; error?: string }
     const session = await getSession();
 
     // Extract form data
-    const cardData: Omit<CardDataType, "id"> = {
+    const cardData: Partial<CardDataType> = {
       name: (formData.get("name") as string).trim(),
       type: (formData.get("type") as string).trim(),
       desc: (formData.get("desc") as string).trim(),
       img: (formData.get("img") as string).trim(),
-      price: Number((formData.get("price") as string).trim()),
-      atk: Number(formData.get("atk")),
-      def: Number(formData.get("def")),
-      level: Number(formData.get("level")),
-      attribute: (formData.get("attribute") as string).trim(),
-      race: (formData.get("race") as string).trim(),
       deckType: (formData.get("deckType") as string).trim(),
       createdBy: session.user || "Unknown user",
     };
@@ -78,12 +70,7 @@ export async function createCard(prevState: { success: boolean; error?: string }
     const newCard = new Cards(cardData);
     await newCard.save();
 
-    // Reset form by redirecting to the same page
-    if (session.user?.id) {
-      redirect(`/profile/${session.user.id}/cards/new`);
-    } else {
-      redirect(`/profile`);
-    }
+    return { success: true };
   } catch (error) {
     console.error("Error creating card:", error);
     return { success: false, error: "Failed to create card. Please try again." };

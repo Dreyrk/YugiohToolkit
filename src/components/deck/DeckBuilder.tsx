@@ -1,21 +1,29 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { GrPowerReset } from "react-icons/gr";
 import { SessionUser } from "@/types";
+import { cn } from "@/lib/utils";
+import useDeckContext from "@/context/DeckContext";
+import getDeckLength from "@/utils/getDeckLength";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import ExtraDeck from "./ExtraDeck";
 import MainDeck from "./MainDeck";
 import SideDeck from "./SideDeck";
-import useDeckContext from "@/context/DeckContext";
 import CreateDeckBtn from "../CreateDeckBtn";
-import { GrPowerReset } from "react-icons/gr";
-import getDeckLength from "@/utils/getDeckLength";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { toast } from "react-toastify";
 
 export default function DeckBuilder({ user }: { user: SessionUser | null }) {
+  const [isMounted, setIsMounted] = useState(false);
   const { deck, dispatch } = useDeckContext();
   const [, , deleteStoredValue] = useLocalStorage("deck");
 
   const deckLength = getDeckLength(deck);
+
+  // l'utilisation du localstorage dans le context créer un décalage entre le rendu serveur et client
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <div className="flex flex-col justify-between py-10 mx-8">
@@ -52,13 +60,15 @@ export default function DeckBuilder({ user }: { user: SessionUser | null }) {
           </span>
         </button>
       </div>
-      <MainDeck />
-      <ExtraDeck />
-      <SideDeck />
+      <MainDeck isMounted={isMounted} />
+      <ExtraDeck isMounted={isMounted} />
+      <SideDeck isMounted={isMounted} />
       <div>
-        <p className="text-white text-lg font-medium">
-          Deck Length: <span className={`text-${deckLength < 40 && "red-600"}`}>{deckLength}</span>
-        </p>
+        {isMounted && (
+          <p className="text-white text-lg font-medium">
+            Deck Length: <span className={cn("text-", deckLength < 40 && "red-600")}>{deckLength}</span>
+          </p>
+        )}
       </div>
       <CreateDeckBtn user={user} />
     </div>

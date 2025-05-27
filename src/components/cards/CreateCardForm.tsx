@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { createCard } from "@/actions/createCard";
 import { Button } from "@/components/ui/button";
@@ -13,31 +13,40 @@ import { ATTRIBUTES, CARD_TYPES, DECK_TYPES, MONSTER_RACES } from "@/constants";
 
 export default function CreateCardForm() {
   const [selectedCardType, setSelectedCardType] = useState("");
+  const [formKey, setFormKey] = useState(Date.now());
   const [state, formAction, isPending] = useActionState(createCard, null);
 
   const isMonsterCard = Boolean(
     selectedCardType && !selectedCardType.includes("Spell") && !selectedCardType.includes("Trap")
   );
 
-  if (state?.success) {
-    toast.success("Yu-Gi-Oh card created successfully.");
-  } else if (state?.error) {
-    toast.error(state.error);
-  }
+  useEffect(() => {
+    if (state?.success) {
+      toast.success("Carte créée avec succès !");
+
+      // Changer la key du form va le reset
+      setFormKey(Date.now());
+      setSelectedCardType("");
+    } else if (state?.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center">Create New Yu-Gi-Oh Card</CardTitle>
-        <CardDescription className="text-center">
-          Fill in the details below to create a new Yu-Gi-Oh card
-        </CardDescription>
+        <CardTitle className="text-3xl font-bold text-center">Ajout Carte Inexistante</CardTitle>
+        <CardDescription className="text-center">Remplis les détails de la nouvelle carte</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction} className="space-y-6">
+        <form action={formAction} key={formKey} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Basic Information */}
-            <BasicFields isMonsterCard={isMonsterCard} setSelectedCardType={setSelectedCardType} />
+            <BasicFields
+              isMonsterCard={isMonsterCard}
+              selectedCardType={selectedCardType}
+              setSelectedCardType={setSelectedCardType}
+            />
 
             {/* Monster Stats */}
             {isMonsterCard && <MonsterFields />}
@@ -75,9 +84,11 @@ export default function CreateCardForm() {
 
 function BasicFields({
   isMonsterCard,
+  selectedCardType,
   setSelectedCardType,
 }: {
   isMonsterCard: boolean;
+  selectedCardType: string;
   setSelectedCardType: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
@@ -86,12 +97,12 @@ function BasicFields({
 
       <div className="space-y-2">
         <Label htmlFor="name">Nom *</Label>
-        <Input id="name" name="name" placeholder="e.g., Blue-Eyes White Dragon" required />
+        <Input id="name" name="name" placeholder="ex: Blue-Eyes White Dragon" autoComplete="off" required />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="type">Type *</Label>
-        <Select name="type" required onValueChange={(type) => setSelectedCardType(type)}>
+        <Select name="type" required value={selectedCardType} onValueChange={(type) => setSelectedCardType(type)}>
           <SelectTrigger>
             <SelectValue placeholder="Select card type" />
           </SelectTrigger>
@@ -107,12 +118,19 @@ function BasicFields({
 
       <div className="space-y-2">
         <Label htmlFor="price">Prix</Label>
-        <Input id="price" name="price" type="number" step="0.01" placeholder="e.g., 10.99" />
+        <Input id="price" name="price" type="number" step="0.01" placeholder="ex: 10.99" autoComplete="off" />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="img">Image URL *</Label>
-        <Input id="img" name="img" type="url" placeholder="https://example.com/card-image.jpg" required />
+        <Input
+          id="img"
+          name="img"
+          type="url"
+          placeholder="https://example.com/card-image.jpg"
+          autoComplete="off"
+          required
+        />
       </div>
 
       <div className="space-y-2">
@@ -142,17 +160,17 @@ function MonsterFields() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="atk">ATK *</Label>
-          <Input id="atk" name="atk" type="number" placeholder="e.g., 3000" required />
+          <Input id="atk" name="atk" type="number" placeholder="e.g., 3000" autoComplete="off" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="def">DEF *</Label>
-          <Input id="def" name="def" type="number" placeholder="e.g., 2500" required />
+          <Input id="def" name="def" type="number" placeholder="e.g., 2500" autoComplete="off" required />
         </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="level">Niveau *</Label>
-        <Input id="level" name="level" type="number" min="1" max="12" placeholder="e.g., 8" required />
+        <Input id="level" name="level" type="number" min="1" max="12" placeholder="ex: 8" autoComplete="off" required />
       </div>
 
       <div className="space-y-2">

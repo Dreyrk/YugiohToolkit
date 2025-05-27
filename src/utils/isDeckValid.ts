@@ -15,7 +15,7 @@ const isDeckValid = (deck: Deck): boolean => {
       return false;
     }
 
-  if (main.length <= 40 || main.length >= 60) {
+  if (main.length < 40 || main.length >= 60) {
     toast.warn("Le main deck doit être compris entre 40 et 60 cartes");
     return false;
   }

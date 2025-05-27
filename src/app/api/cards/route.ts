@@ -30,9 +30,7 @@ export async function GET(req: Request) {
 
     const cards = await Cards.find(query)
       .skip((page - 1) * limit)
-      .limit(limit)
-      .select("-__v")
-      .lean();
+      .limit(limit);
 
     return NextResponse.json(cards, { status: 200 });
   } catch (e) {

@@ -89,9 +89,10 @@ export default function AddToDeckModal({ setIsOpen, deckType }: AddToDeckModalPr
 
   const addToDeck = () => {
     if (deckType === "main" || deckType === "extra" || deckType === "side") {
+      const selectedCardsSortedByName = selectedCards.sort((a, b) => a.name.localeCompare(b.name));
       dispatch({
         type: "ADD_CARD",
-        payload: { cards: selectedCards, deckType },
+        payload: { cards: selectedCardsSortedByName, deckType },
       });
       closeModal();
     }
@@ -153,7 +154,7 @@ export default function AddToDeckModal({ setIsOpen, deckType }: AddToDeckModalPr
           ref={listRef}
           className={`z-30 h-full w-full overflow-y-auto overflow-x-hidden grid grid-cols-2 lg:grid-cols-4 gap-4 px-4 scrollbar-${deckType}`}>
           {displayedCards.map((card, i) => (
-            <li key={card.id + i} className="m-0">
+            <li key={`${card.id}-${i}`} className="m-0">
               <YugiCard selectedCards={selectedCards} setSelectedCards={setSelectedCards} card={card} />
             </li>
           ))}
