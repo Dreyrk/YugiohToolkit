@@ -1,5 +1,11 @@
 import { Schema, model, models } from "mongoose";
 
+const SessionUserSchema = new Schema({
+  id: { type: String },
+  pseudo: { type: String },
+  email: { type: String },
+});
+
 const CardSchema = new Schema(
   {
     id: {
@@ -24,24 +30,24 @@ const CardSchema = new Schema(
     },
     atk: {
       type: Number,
-      required: false,
+      required: true,
     },
     def: {
       type: Number,
-      required: false,
+      required: true,
     },
     level: {
       type: Number,
-      required: false,
+      required: true,
     },
     race: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     attribute: {
       type: String,
-      required: false,
+      required: true,
       trim: true,
     },
     img: {
@@ -51,13 +57,17 @@ const CardSchema = new Schema(
     },
     price: {
       type: String,
-      required: true,
+      required: false,
     },
     deckType: {
       type: String,
       required: false,
       trim: true,
       enum: ["main", "extra", "side", null],
+    },
+    createdBy: {
+      type: SessionUserSchema,
+      required: false,
     },
   },
   {

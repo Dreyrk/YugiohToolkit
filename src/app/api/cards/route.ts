@@ -4,7 +4,7 @@ import Cards from "@/lib/database/models/cards.model";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
-  const deckType = searchParams.get("deckType")?.trim();
+  const deckTypeParams = searchParams.get("deckType")?.trim();
   const types = searchParams.get("types");
   const search = searchParams.get("search")?.trim() || "";
   const page = Number(searchParams.get("page") || "1");
@@ -12,6 +12,8 @@ export async function GET(req: Request) {
 
   try {
     await db();
+
+    const deckType = deckTypeParams === "side" ? { $in: ["main", "extra"] } : deckTypeParams;
 
     const query = {
       ...(deckType && { deckType }),

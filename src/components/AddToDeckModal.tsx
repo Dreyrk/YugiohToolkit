@@ -8,6 +8,7 @@ import { AddToDeckModalProps, CardFiltersQuery, YugiCards } from "@/types";
 import YugiCard from "./cards/YugiCard";
 import Loader from "./Loader";
 import FiltersBar from "./FiltersBar";
+import { toast } from "react-toastify";
 
 export default function AddToDeckModal({ setIsOpen, deckType }: AddToDeckModalProps) {
   const listRef = useRef<HTMLUListElement>(null);
@@ -42,8 +43,12 @@ export default function AddToDeckModal({ setIsOpen, deckType }: AddToDeckModalPr
         });
         const res = await fetch(`/api/cards?${params.toString()}`);
         const data = await res.json();
-        setDisplayedCards((prev) => (filters.page === 1 ? data : [...prev, ...data]));
-        setHasMore(data.length === filters.limit);
+        if (res.ok) {
+          setDisplayedCards((prev) => (filters.page === 1 ? data : [...prev, ...data]));
+          setHasMore(data.length === filters.limit);
+        } else {
+          toast.error(data.error);
+        }
       } catch (err) {
         console.error("Failed to fetch cards:", err);
       }
