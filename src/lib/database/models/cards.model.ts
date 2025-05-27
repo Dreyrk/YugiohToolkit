@@ -30,24 +30,24 @@ const CardSchema = new Schema(
     },
     atk: {
       type: Number,
-      required: true,
+      required: false,
     },
     def: {
       type: Number,
-      required: true,
+      required: false,
     },
     level: {
       type: Number,
-      required: true,
+      required: false,
     },
     race: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     attribute: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     img: {
