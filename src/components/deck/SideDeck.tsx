@@ -17,7 +17,7 @@ export default function SideDeck() {
           deck.side.map((card: YugiCards, i: number) => (
             <YugiCard card={card} deckType="side" inDeck={true} key={card.id + i} />
           ))}
-        <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
+        <AddCardBtn setIsOpen={setIsOpen} />
       </div>
       {isOpen && <AddToDeckModal isOpen={isOpen} setIsOpen={setIsOpen} deckType="side" />}
     </section>

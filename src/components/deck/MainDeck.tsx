@@ -17,7 +17,7 @@ export default function MainDeck() {
           deck.main.map((card: YugiCards, i: number) => (
             <YugiCard deckType="main" inDeck={true} card={card} key={card.id + i} />
           ))}
-        <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
+        <AddCardBtn setIsOpen={setIsOpen} />
       </div>
       {isOpen && <AddToDeckModal isOpen={isOpen} setIsOpen={setIsOpen} deckType="main" />}
     </section>

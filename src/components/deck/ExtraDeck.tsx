@@ -17,7 +17,7 @@ export default function ExtraDeck() {
           deck.extra.map((card: YugiCards, i: number) => (
             <YugiCard card={card} deckType="extra" inDeck={true} key={card.id + i} />
           ))}
-        <AddCardBtn isOpen={isOpen} setIsOpen={setIsOpen} />
+        <AddCardBtn setIsOpen={setIsOpen} />
       </div>
       {isOpen && <AddToDeckModal isOpen={isOpen} setIsOpen={setIsOpen} deckType="extra" />}
     </section>
