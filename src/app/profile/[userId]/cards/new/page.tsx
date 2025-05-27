@@ -1,13 +1,9 @@
-import { getSession } from "@/actions/auth/getSession";
 import CreateCardForm from "@/components/cards/CreateCardForm";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
-  const session = await getSession();
-
-  if (!session.user) {
-    redirect("/profile");
-  } else {
-    return <CreateCardForm user={session.user} />;
-  }
+  return (
+    <div className="container mx-auto py-8 px-4 max-w-4xl">
+      <CreateCardForm />;
+    </div>
+  );
 }

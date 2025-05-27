@@ -26,52 +26,50 @@ export default function CreateCardForm() {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-4xl">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-3xl font-bold text-center">Create New Yu-Gi-Oh Card</CardTitle>
-          <CardDescription className="text-center">
-            Fill in the details below to create a new Yu-Gi-Oh card
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form action={formAction} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Basic Information */}
-              <BasicFields isMonsterCard={isMonsterCard} setSelectedCardType={setSelectedCardType} />
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-3xl font-bold text-center">Create New Yu-Gi-Oh Card</CardTitle>
+        <CardDescription className="text-center">
+          Fill in the details below to create a new Yu-Gi-Oh card
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form action={formAction} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Basic Information */}
+            <BasicFields isMonsterCard={isMonsterCard} setSelectedCardType={setSelectedCardType} />
 
-              {/* Monster Stats */}
-              {isMonsterCard && <MonsterFields />}
-            </div>
+            {/* Monster Stats */}
+            {isMonsterCard && <MonsterFields />}
+          </div>
 
-            {/* Description */}
-            <div className="space-y-2">
-              <Label htmlFor="desc">Card Description *</Label>
-              <Textarea
-                id="desc"
-                name="desc"
-                placeholder="Enter the card's effect or flavor text..."
-                className="min-h-[120px]"
-                required
-              />
-            </div>
+          {/* Description */}
+          <div className="space-y-2">
+            <Label htmlFor="desc">Card Description *</Label>
+            <Textarea
+              id="desc"
+              name="desc"
+              placeholder="Enter the card's effect or flavor text..."
+              className="min-h-[120px]"
+              required
+            />
+          </div>
 
-            <input type="hidden" name="createdBy" value="{}" />
+          <input type="hidden" name="createdBy" value="{}" />
 
-            {/* Submit Button */}
-            <div className="flex justify-center pt-4">
-              <Button type="submit" size="lg" disabled={isPending} className="w-full md:w-auto px-8">
-                {isPending ? "Creating Card..." : "Create Card"}
-              </Button>
-            </div>
+          {/* Submit Button */}
+          <div className="flex justify-center pt-4">
+            <Button type="submit" size="lg" disabled={isPending} className="w-full md:w-auto px-8">
+              {isPending ? "Creating Card..." : "Create Card"}
+            </Button>
+          </div>
 
-            {/* Display success/error messages */}
-            {state?.success && <div className="text-center text-green-600 font-medium">Card created successfully!</div>}
-            {state?.error && <div className="text-center text-red-600 font-medium">{state.error}</div>}
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+          {/* Display success/error messages */}
+          {state?.success && <div className="text-center text-green-600 font-medium">Card created successfully!</div>}
+          {state?.error && <div className="text-center text-red-600 font-medium">{state.error}</div>}
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 
