@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import { getSession } from "@/actions/auth/getSession";
 import getCardsById from "@/actions/getCardById";
 import getUserFavs from "@/actions/getUserFavs";
@@ -5,10 +6,10 @@ import AnimatedText from "@/components/AnimatedText";
 import DetailsDisplay from "@/components/DetailsDisplay";
 import AnimatedYugiCard from "@/components/cards/AnimatedYugiCard";
 import { YugiCards } from "@/types";
-import { redirect } from "next/navigation";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const card = (await getCardsById(params.id)) as YugiCards;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const card = (await getCardsById(id)) as YugiCards;
   const session = await getSession();
 
   if (!session.user) {
