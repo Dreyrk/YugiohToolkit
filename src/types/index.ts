@@ -45,6 +45,12 @@ export interface FooterLinks {
   href: string;
 }
 
+export type DetailsDisplayProps = {
+  user: SessionUser;
+  card: YugiCards;
+  isFav: boolean;
+};
+
 interface isOpenStateProps {
   isOpen: boolean;
   setIsOpen: (s: boolean) => void;
