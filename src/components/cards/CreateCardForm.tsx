@@ -82,20 +82,15 @@ function BasicFields({
 }) {
   return (
     <div className={`space-y-4 ${!isMonsterCard ? "col-span-2" : ""}`}>
-      <h3 className="text-lg font-semibold">Basic Information</h3>
+      <h3 className="text-lg font-semibold">Basic Informations</h3>
 
       <div className="space-y-2">
-        <Label htmlFor="id">Card ID *</Label>
-        <Input id="id" name="id" type="number" placeholder="e.g., 12345678" required />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="name">Card Name *</Label>
+        <Label htmlFor="name">Nom *</Label>
         <Input id="name" name="name" placeholder="e.g., Blue-Eyes White Dragon" required />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="type">Card Type *</Label>
+        <Label htmlFor="type">Type *</Label>
         <Select name="type" required onValueChange={(type) => setSelectedCardType(type)}>
           <SelectTrigger>
             <SelectValue placeholder="Select card type" />
@@ -111,13 +106,29 @@ function BasicFields({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="price">Price</Label>
+        <Label htmlFor="price">Prix</Label>
         <Input id="price" name="price" type="number" step="0.01" placeholder="e.g., 10.99" />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="img">Image URL *</Label>
         <Input id="img" name="img" type="url" placeholder="https://example.com/card-image.jpg" required />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="deckType">Deck Type (main, extra, side)*</Label>
+        <Select name="deckType" required>
+          <SelectTrigger>
+            <SelectValue placeholder="Select deck type" />
+          </SelectTrigger>
+          <SelectContent>
+            {DECK_TYPES.map((deck) => (
+              <SelectItem key={deck.value} value={deck.value}>
+                {deck.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );
@@ -140,12 +151,12 @@ function MonsterFields() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="level">Level *</Label>
+        <Label htmlFor="level">Niveau *</Label>
         <Input id="level" name="level" type="number" min="1" max="12" placeholder="e.g., 8" required />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="attribute">Attribute *</Label>
+        <Label htmlFor="attribute">Attribut *</Label>
         <Select name="attribute" required>
           <SelectTrigger>
             <SelectValue placeholder="Select attribute" />
@@ -170,22 +181,6 @@ function MonsterFields() {
             {MONSTER_RACES.map((race) => (
               <SelectItem key={race} value={race}>
                 {race}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="deckType">Deck Type *</Label>
-        <Select name="deckType" required>
-          <SelectTrigger>
-            <SelectValue placeholder="Select deck type" />
-          </SelectTrigger>
-          <SelectContent>
-            {DECK_TYPES.map((deck) => (
-              <SelectItem key={deck.value} value={deck.value}>
-                {deck.label}
               </SelectItem>
             ))}
           </SelectContent>

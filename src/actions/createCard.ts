@@ -17,8 +17,7 @@ export async function createCard(prevState: { success: boolean; error?: string }
     const session = await getSession();
 
     // Extract form data
-    const cardData: CardDataType = {
-      id: Number.parseInt(formData.get("id") as string),
+    const cardData: Omit<CardDataType, "id"> = {
       name: (formData.get("name") as string).trim(),
       type: (formData.get("type") as string).trim(),
       desc: (formData.get("desc") as string).trim(),
@@ -34,8 +33,7 @@ export async function createCard(prevState: { success: boolean; error?: string }
     };
 
     // Validate required fields
-    // Validate required fields (based on schema)
-    if (!cardData.id || !cardData.name || !cardData.type || !cardData.desc || !cardData.img) {
+    if (!cardData.name || !cardData.type || !cardData.desc || !cardData.img) {
       return { success: false, error: "Please fill in all required fields" };
     }
 
@@ -71,9 +69,9 @@ export async function createCard(prevState: { success: boolean; error?: string }
     }
 
     // Check if card ID already exists
-    const existingCard = (await Cards.findOne({ id: cardData.id })) || (await Cards.findById(cardData.id));
+    const existingCard = await Cards.findOne({ name: cardData.name });
     if (existingCard) {
-      return { success: false, error: "A card with this ID already exists" };
+      return { success: false, error: "A card with this name already exists" };
     }
 
     // Create the new card
