@@ -6,8 +6,8 @@ import DeleteDeckBtn from "@/components/DeleteDeckBtn";
 import EditDeckBtn from "@/components/buttons/EditDeckBtn";
 import DeckDisplayer from "@/components/deck/DeckDisplayer";
 
-export default async function Page({ params }: { params: { userId: string; deckId: string } }) {
-  const { userId, deckId } = params;
+export default async function Page({ params }: { params: Promise<{ userId: string; deckId: string }> }) {
+  const { userId, deckId } = await params;
 
   const deck = await getDeck(userId, deckId);
 

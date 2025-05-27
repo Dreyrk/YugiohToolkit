@@ -4,8 +4,8 @@ import DeckBox from "@/components/deck/DeckBox";
 import { Deck } from "@/types";
 import { FaPlusCircle } from "react-icons/fa";
 
-export default async function Page({ params }: { params: { userId: string } }) {
-  const { userId } = params;
+export default async function Page({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params;
   const userDecks = await getDecks(userId);
 
   return (
