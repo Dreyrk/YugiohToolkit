@@ -28,6 +28,11 @@ export default async function Page() {
           </Link>
           <Link
             className="text-lg font-semibold py-2 px-4 text-center bg-neutral-800 rounded-lg text-slate-200 shadow-sm shadow-neutral-600 hover:scale-95"
+            href={`/profile/${session?.user.id}/cards/new`}>
+            Compléter la database
+          </Link>
+          <Link
+            className="text-lg font-semibold py-2 px-4 text-center bg-neutral-800 rounded-lg text-slate-200 shadow-sm shadow-neutral-600 hover:scale-95"
             href={`/profile/${session?.user.id}/settings`}>
             Paramètres
           </Link>

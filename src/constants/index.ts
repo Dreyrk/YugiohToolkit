@@ -29,3 +29,52 @@ export const ExtraDeckTypes = [
   "XYZ Monster",
   "XYZ Pendulum Effect Monster",
 ];
+
+export const CARD_TYPES = [
+  "Effect Monster",
+  "Normal Monster",
+  "Ritual Monster",
+  "Fusion Monster",
+  "Synchro Monster",
+  "Xyz Monster",
+  "Pendulum Monster",
+  "Link Monster",
+  "Spell Card",
+  "Trap Card",
+];
+
+export const ATTRIBUTES = ["DARK", "DIVINE", "EARTH", "FIRE", "LIGHT", "WATER", "WIND"];
+
+export const MONSTER_RACES = [
+  "Aqua",
+  "Beast",
+  "Beast-Warrior",
+  "Creator-God",
+  "Cyberse",
+  "Dinosaur",
+  "Divine-Beast",
+  "Dragon",
+  "Fairy",
+  "Fiend",
+  "Fish",
+  "Insect",
+  "Machine",
+  "Plant",
+  "Psychic",
+  "Pyro",
+  "Reptile",
+  "Rock",
+  "Sea Serpent",
+  "Spellcaster",
+  "Thunder",
+  "Warrior",
+  "Winged Beast",
+  "Wyrm",
+  "Zombie",
+];
+
+export const DECK_TYPES = [
+  { value: "main", label: "Main Deck" },
+  { value: "extra", label: "Extra Deck" },
+  { value: "side", label: "Side Deck" },
+];
