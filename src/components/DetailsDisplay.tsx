@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 import FavoriteBtn from "@/components/buttons/FavoriteBtn";
 import { DetailsDisplayProps } from "@/types";
-import { toast } from "react-toastify";
 
 export default function DetailsDisplay({ user, card, isFav }: DetailsDisplayProps) {
   const [liked, setLiked] = useState(isFav);

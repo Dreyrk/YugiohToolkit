@@ -6,13 +6,9 @@ import Login from "./Login";
 
 export default function Auth() {
   const [registered, setRegistered] = useState<boolean>(false);
-  return (
-    <div>
-      {registered ? (
-        <Login registered={registered} setRegistered={setRegistered} />
-      ) : (
-        <Register registered={registered} setRegistered={setRegistered} />
-      )}
-    </div>
+  return registered ? (
+    <Login registered={registered} setRegistered={setRegistered} />
+  ) : (
+    <Register registered={registered} setRegistered={setRegistered} />
   );
 }
