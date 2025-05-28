@@ -46,14 +46,13 @@ export interface FooterLinks {
 }
 
 export type DetailsDisplayProps = {
-  user: SessionUser;
   card: YugiCards;
   isFav: boolean;
 };
 
 interface isOpenStateProps {
-  isOpen: boolean;
-  setIsOpen: (s: boolean) => void;
+  isOpen?: boolean;
+  setIsOpen: React.Dispatch<SetStateAction<boolean>>;
 }
 
 export interface AddToDeckModalProps extends isOpenStateProps {
@@ -209,4 +208,10 @@ export interface CollectionYugiCardProps {
 
 export type AddCardBtnProps = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export type DeckSectionType = {
+  title: string;
+  type: DeckType;
+  cards: YugiCards[];
 };

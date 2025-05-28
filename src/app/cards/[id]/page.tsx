@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <div className="grid grid-cols-8 gap-8 py-6 max-lg:flex max-lg:flex-col max-lg:gap-6">
         <AnimatedText style="col-span-full" text={card.name} />
         <AnimatedYugiCard style="col-start-2 max-lg:self-center" card={card} />
-        <DetailsDisplay user={session.user} isFav={isFav} card={card} />
+        <DetailsDisplay isFav={isFav} card={card} />
       </div>
     );
   }

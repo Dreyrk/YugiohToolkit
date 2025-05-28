@@ -9,7 +9,9 @@ async function getCardsById(id: string) {
 
     const card = await Cards.findById(id);
 
-    return card;
+    const plainCardObject = JSON.parse(JSON.stringify(card));
+
+    return plainCardObject;
   } catch (e) {
     console.error((e as Error).message);
   }

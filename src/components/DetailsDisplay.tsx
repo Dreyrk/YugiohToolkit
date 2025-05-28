@@ -2,28 +2,28 @@
 
 import { useState } from "react";
 import { toast } from "react-toastify";
-import FavoriteBtn from "@/components/buttons/FavoriteBtn";
 import { DetailsDisplayProps } from "@/types";
+import FavoriteBtn from "@/components/buttons/FavoriteBtn";
+import addCardToFav from "@/actions/users/addCardToFav";
+import removeFavCard from "@/actions/users/removeFavCard";
 
-export default function DetailsDisplay({ user, card, isFav }: DetailsDisplayProps) {
-  const [liked, setLiked] = useState(isFav);
+export default function DetailsDisplay({ card, isFav }: DetailsDisplayProps) {
+  const [liked, setLiked] = useState(isFav || false);
   const like = async () => {
-    if (user.id) {
-      const body = JSON.stringify({ card });
-      const res = await fetch(`/api/user/${user.id}/favs`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body,
-      });
-      if (res.ok) {
-        const { message, liked } = await res.json();
-        setLiked(liked);
-        toast.success(message);
-      } else {
-        toast.error("Something goes wrong...");
+    if (!liked) {
+      const { success, error } = await addCardToFav(card);
+
+      if (error) {
+        toast.error(error);
       }
+      setLiked(success);
+    } else {
+      const { error } = await removeFavCard(card);
+
+      if (error) {
+        toast.error(error);
+      }
+      setLiked(false);
     }
   };
 

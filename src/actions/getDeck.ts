@@ -12,7 +12,11 @@ async function getDeck(userId: string, deckId: string) {
 
     const currentUserDeck = currentUser.decks.find((deck: Deck) => deck.id === deckId);
 
-    return currentUserDeck;
+    const plainDeckObject = JSON.parse(JSON.stringify(currentUserDeck));
+
+    plainDeckObject.userId = userId;
+
+    return plainDeckObject;
   } catch (e) {
     throw new Error(`failed to get deck ${deckId} : ${(e as Error).message}`);
   }
