@@ -3,17 +3,27 @@
 import db from "@/lib/database/db";
 import Users from "@/lib/database/models/users.model";
 import { YugiCards } from "@/types";
+import { getSession } from "../auth/getSession";
 
-async function removeFavCard(userId: string, card: YugiCards) {
+async function removeFavCard(card: YugiCards) {
   try {
     await db();
 
-    const currentUser = await Users.findById(userId);
+    const session = await getSession();
+
+    if (!session.user?.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const currentUser = await Users.findById(session.user.id).select("favs");
 
     currentUser.favs = currentUser.favs.filter((currCard: YugiCards) => currCard.id !== card.id);
+
     await currentUser.save();
+
+    return { success: true };
   } catch (e) {
-    throw new Error(`Failed to remove favorite card : ${(e as Error).message}`);
+    return { success: false, error: `Failed to remove favorite card : ${(e as Error).message}` };
   }
 }
 

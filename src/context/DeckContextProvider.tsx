@@ -12,7 +12,7 @@ const emptyDeck = {
   side: [],
 };
 
-function deckReducer(deck: Deck, action: DeckAction): Deck {
+export function deckReducer(deck: Deck, action: DeckAction): Deck {
   switch (action.type) {
     case "RESET":
       return { ...emptyDeck };
@@ -53,7 +53,6 @@ function deckReducer(deck: Deck, action: DeckAction): Deck {
 
 export default function DeckContextProvider({ children }: { children: React.ReactNode }) {
   const [getStoredDeck, setStoredDeck] = useLocalStorage<Deck | null>("deck");
-
   const storedDeck = getStoredDeck();
 
   const [deck, dispatch] = useReducer(deckReducer, storedDeck || emptyDeck);

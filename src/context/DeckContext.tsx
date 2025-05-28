@@ -4,6 +4,7 @@ import { Deck, DeckAction } from "@/types";
 interface DeckContextType {
   deck: Deck;
   dispatch: React.Dispatch<DeckAction>;
+  initialDeck?: Deck;
 }
 
 export const DeckContext = createContext<DeckContextType>({
