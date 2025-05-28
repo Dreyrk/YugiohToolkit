@@ -14,7 +14,7 @@ export default function DeckDetailClient({ deleteUserDeckAction }: { deleteUserD
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const { deck, dispatch, initialDeck } = useDeckContext();
+  const { deck, dispatch } = useDeckContext();
 
   const deckLength = getDeckLength(deck);
 
