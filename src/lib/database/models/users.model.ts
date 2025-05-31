@@ -15,7 +15,7 @@ export const CardSchema = new Schema({
 });
 
 export const CollectionCardSchema = new Schema({
-  id: { type: Number },
+  id: { type: String },
   name: { type: String },
   desc: { type: String },
   atk: { type: Number },
