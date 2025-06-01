@@ -48,6 +48,7 @@ const CollectionSchema = new Schema({
   name: { type: String, required: true, default: "Non défini" },
   description: { type: String, required: false },
   cards: [CollectionCardSchema],
+  isSharable: { type: Boolean, default: false },
 });
 
 const UserSchema = new Schema(

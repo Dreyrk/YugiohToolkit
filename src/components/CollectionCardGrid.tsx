@@ -6,8 +6,8 @@ interface CollectionCardGridProps {
   cards: YugiCard[];
   selectedCards?: YugiCard[];
   onCardSelect?: (card: YugiCard) => void;
-  onRemoveCard?: (card: YugiCard) => void; // Ajout de la prop de suppression
-  isEditMode?: boolean; // Ajout de la prop de mode édition
+  onRemoveCard?: (card: YugiCard) => void;
+  isEditMode?: boolean;
   isLoading?: boolean;
   showSelectionCounter?: boolean;
 }
