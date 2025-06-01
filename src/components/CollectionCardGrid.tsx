@@ -6,8 +6,8 @@ interface CollectionCardGridProps {
   cards: YugiCard[];
   selectedCards?: YugiCard[];
   onCardSelect?: (card: YugiCard) => void;
-  onRemoveCard?: (card: YugiCard) => void; // Ajout de la prop de suppression
-  isEditMode?: boolean; // Ajout de la prop de mode édition
+  onRemoveCard?: (card: YugiCard) => void;
+  isEditMode?: boolean;
   isLoading?: boolean;
   showSelectionCounter?: boolean;
 }
@@ -38,7 +38,7 @@ export default function CollectionCardGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4 place-items-center">
       {cards.map((card, i) => (
         <CollectionYugiCard
           key={`${i}-${card.id}`}
