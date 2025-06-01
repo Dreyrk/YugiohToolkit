@@ -42,7 +42,9 @@ export default function CollectionYugiCard({
       onClick={isInteractive ? selectCard : undefined}
       role={isInteractive ? "button" : undefined}
       tabIndex={isInteractive ? 0 : undefined}
-      className={`relative transition-transform ${isInteractive ? "hover:scale-95 cursor-pointer" : "cursor-default"}`}
+      className={`relative w-fit transition-transform ${
+        isInteractive ? "hover:scale-95 cursor-pointer" : "cursor-default"
+      }`}
       onKeyDown={
         isInteractive
           ? (e) => {

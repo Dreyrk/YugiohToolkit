@@ -17,7 +17,6 @@ export default async function getSharableCollection(
       (collection: Collection) => collection._id.toString() === collectionId
     );
 
-    console.log(collectionOwner.collections);
     if (!collection) {
       return { success: false, error: "404: not found" };
     }
