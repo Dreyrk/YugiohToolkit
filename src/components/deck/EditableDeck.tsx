@@ -1,4 +1,3 @@
-// components/deck/EditableDeck.tsx
 "use client";
 
 import { useState } from "react";
