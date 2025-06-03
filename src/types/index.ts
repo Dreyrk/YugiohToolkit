@@ -195,6 +195,7 @@ export interface Collection {
   name: string;
   description?: string;
   cards: CollectionYugiCard[];
+  isSharable?: boolean;
 }
 export interface CollectionYugiCardProps {
   card: CollectionYugiCard;
@@ -214,4 +215,20 @@ export type DeckSectionType = {
   title: string;
   type: DeckType;
   cards: YugiCards[];
+};
+
+export type UserCollectionProps = {
+  collection: Collection;
+  pathname: string;
+  handleDeleteCollection?: (formData: FormData) => Promise<void>;
+  isCurrentUser?: boolean;
+  userId?: string;
+};
+
+export type ManageButtonsProps = {
+  pathname: string;
+  userId?: string;
+  isCurrentUser?: boolean;
+  collection: Collection;
+  handleDeleteCollection?: (formData: FormData) => Promise<void>;
 };

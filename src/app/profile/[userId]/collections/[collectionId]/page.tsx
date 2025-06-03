@@ -29,6 +29,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
     const name = formData.get("name")?.toString().trim() || "";
     const description = formData.get("description")?.toString().trim() || "";
+    const isSharable = Boolean(formData.get("isSharable")) || false;
 
     if (!name) {
       toast.warn("Le nom de la collection est requis.");
@@ -38,7 +39,8 @@ export default async function Page({ params, searchParams }: PageProps) {
     const cardsData = formData.get("cardsData")?.toString();
     const cards = cardsData ? JSON.parse(cardsData) : collection.cards;
 
-    const updated = { ...collection, cards, name, description };
+    const updated = { ...collection, cards, name, description, isSharable };
+
     await editCollection(updated);
     redirect(`/profile/${userId}/collections/${collection.id || collection}`);
   };

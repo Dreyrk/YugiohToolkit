@@ -1,17 +1,15 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Collection } from "@/types";
 import getUserCollections from "@/actions/users/collection/getUserCollections";
 import editCollection from "@/actions/users/collection/editUserCollection";
 import deleteUserCollection from "@/actions/users/collection/deleteUserCollection";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -25,8 +23,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import createNewUserCollection from "@/actions/users/collection/createNewUserCollection";
+import UserCollection from "./UserCollection";
 
-export default function UserCollections() {
+export default function UserCollections({ isCurrentUser, userId }: { isCurrentUser?: boolean; userId?: string }) {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
@@ -121,8 +120,9 @@ export default function UserCollections() {
     }
   };
 
-  const handleDeleteCollection = async (collectionId: string) => {
+  const handleDeleteCollection = async (formData: FormData) => {
     try {
+      const collectionId = formData.get("collectionId") as string;
       const collectionToDelete = collections.find((c) => c.id === collectionId);
 
       const { success, error } = await deleteUserCollection(collectionId);
@@ -216,54 +216,14 @@ export default function UserCollections() {
       ) : (
         <div className="grid gap-4">
           {collections.map((collection) => (
-            <Card key={collection.id} className="overflow-hidden">
-              <CardHeader className="pb-2">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle>{collection.name}</CardTitle>
-                    <CardDescription>
-                      {collection.cards.length} carte{collection.cards.length !== 1 ? "s" : ""}
-                    </CardDescription>
-                  </div>
-                  <div className="flex gap-1">
-                    <Link href={`${pathname}/${collection.id}?edit=true`}>
-                      <Button variant="ghost" size="icon">
-                        <Pencil className="h-4 w-4" />
-                        <span className="sr-only">Modifier</span>
-                      </Button>
-                    </Link>
-                    <Button variant="ghost" size="icon" onClick={() => handleDeleteCollection(collection.id)}>
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Supprimer</span>
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {collection.description && (
-                  <p className="text-sm text-muted-foreground mb-2">{collection.description}</p>
-                )}
-                <div className="flex space-x-2 overflow-x-auto pb-2">
-                  {collection.cards.slice(0, 5).map((card, i) => (
-                    <div key={`${card.id}-${i}`} className="w-20 h-28 flex-shrink-0 relative rounded overflow-hidden">
-                      <Image src={card.img || "/assets/cardBack.jpg"} alt={card.name} fill className="object-cover" />
-                    </div>
-                  ))}
-                  {collection.cards.length > 5 && (
-                    <div className="w-20 h-28 flex-shrink-0 bg-muted flex items-center justify-center rounded">
-                      <span className="text-sm font-medium">+{collection.cards.length - 5}</span>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-              <CardFooter className="pt-0">
-                <Link href={`${pathname}/${collection.id || collection._id}`}>
-                  <Button variant="outline" className="w-full">
-                    Voir Collection
-                  </Button>
-                </Link>
-              </CardFooter>
-            </Card>
+            <UserCollection
+              key={collection.id}
+              collection={collection}
+              handleDeleteCollection={handleDeleteCollection}
+              pathname={pathname}
+              isCurrentUser={isCurrentUser}
+              userId={userId}
+            />
           ))}
         </div>
       )}

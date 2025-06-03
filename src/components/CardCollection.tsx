@@ -13,7 +13,7 @@ import CollectionFilters from "./CollectionFilters";
 import CollectionManager from "./CollectionManager";
 import CollectionCardGrid from "./CollectionCardGrid";
 
-export default function CardCollection() {
+export default function CardCollection({ userId }: { userId?: string }) {
   const searchParams = useSearchParams();
   const [cards, setCards] = useState<CollectionYugiCard[]>([]);
   const [selectedCards, setSelectedCards] = useState<CollectionYugiCard[]>([]);
@@ -137,7 +137,7 @@ export default function CardCollection() {
         </TabsContent>
 
         <TabsContent value="collections">
-          <UserCollections />
+          <UserCollections isCurrentUser={true} userId={userId} />
         </TabsContent>
       </Tabs>
     </div>

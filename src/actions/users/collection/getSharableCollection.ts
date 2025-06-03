@@ -1,36 +1,36 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use server";
 
-import { getSession } from "@/actions/auth/getSession";
 import db from "@/lib/database/db";
 import Users from "@/lib/database/models/users.model";
-import { Collection, CollectionYugiCard } from "@/types";
+import { Collection } from "@/types";
 import { parseCollectionFilters } from "@/utils/extractSearchParams";
 
-export default async function getUserCollectionById(
+export default async function getSharableCollection(
+  userId: string,
   collectionId: string,
   filters?: Record<string, string | undefined>
-): Promise<Omit<Collection, "_id">> {
+): Promise<{ data?: Collection; success: boolean; error?: string }> {
   try {
-    const session = await getSession();
-    if (!session?.user?.id) {
-      throw new Error("Unauthorized");
-    }
-
     await db();
 
-    const user = (await Users.findById(session.user.id).select("collections").lean()) as {
+    const collectionOwner = (await Users.findById(userId).select("collections")) as {
       collections: Collection[];
     } | null;
 
-    if (!user) {
-      throw new Error("User not found");
+    if (!collectionOwner) {
+      return { success: false, error: "404: not found" };
     }
 
-    let collection = user.collections.find((c) => c._id.toString() === collectionId || c.id === collectionId);
+    let collection = collectionOwner.collections.find(
+      (collection: Collection) => collection._id.toString() === collectionId && collection.isSharable
+    );
 
     if (!collection) {
-      throw new Error("Collection not found");
+      return { success: false, error: "404: not found" };
+    }
+
+    if (!collection.isSharable) {
+      return { success: false, error: "This collection cannot be shared" };
     }
 
     let filteredCards = collection.cards;
@@ -58,14 +58,11 @@ export default async function getUserCollectionById(
       collection = { ...collection, cards: filteredCards };
     }
 
-    return {
-      id: collection._id.toString() || collection.id,
-      name: collection.name,
-      description: collection.description,
-      cards: collection.cards.map(({ _id, ...card }: CollectionYugiCard) => ({ ...card })),
-      isSharable: collection.isSharable,
-    };
+    return { success: true, data: JSON.parse(JSON.stringify(collection)) };
   } catch (e) {
-    throw new Error(`Error fetching collection: ${(e as Error).message}`);
+    console.error(
+      `failed to get sharable collection (user: ${userId}, collection: ${collectionId}): ${(e as Error).message}`
+    );
+    return { success: false, error: (e as Error).message };
   }
 }

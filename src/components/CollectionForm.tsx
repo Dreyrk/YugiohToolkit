@@ -25,11 +25,11 @@ export default function CollectionForm({
   handleEditCollection: (formData: FormData) => Promise<void>;
 }) {
   const [collectionCards, setCollectionCards] = useState<CollectionYugiCard[]>(collection.cards || []);
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
-  const [removeDuplicateCards, setRemoveDuplicateCards] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState<boolean>(false);
+  const [removeDuplicateCards, setRemoveDuplicateCards] = useState<boolean>(false);
+  const [isSharable, setIsSharable] = useState<boolean>(collection.isSharable || false);
 
   const handleRemoveDuplicate = () => {
-    console.log(removeDuplicateCards);
     if (!removeDuplicateCards) {
       setCollectionCards(removeDuplicates(collection.cards, "id"));
       setRemoveDuplicateCards(true);
@@ -111,13 +111,35 @@ export default function CollectionForm({
           ) : (
             collection.description && <p>{collection.description}</p>
           )}
-          <div className="flex justify-between">
-            <p className="text-sm">
+          <div className="flex justify-between py-3">
+            <p className="text-sm italic">
               {collectionCards.length} carte{collectionCards.length !== 1 ? "s" : ""} dans la collection
             </p>
-            <div className="flex items-center gap-2 bg-glass px-4 py-2 rounded-xl">
-              <span>Retirer les doublons (pour une vision moins chargée)</span>
-              <Checkbox value={Number(removeDuplicateCards)} onClick={handleRemoveDuplicate} />
+            <div className="flex flex-col items-end gap-4">
+              <label
+                htmlFor="isSharable"
+                className="w-fit flex items-center gap-2 bg-glass px-4 py-2 rounded-xl cursor-pointer">
+                <span>Visible (public)</span>
+                <Checkbox
+                  id="isSharable"
+                  name="isSharable"
+                  value={Number(isSharable)}
+                  checked={isSharable}
+                  onCheckedChange={(checked) => setIsSharable(Boolean(checked))}
+                  disabled={!isEditMode}
+                />
+              </label>
+              <label
+                htmlFor="removeDuplicate"
+                className="flex items-center gap-2 bg-glass px-4 py-2 rounded-xl cursor-pointer">
+                <span>Retirer les doublons (pour une vision moins chargée)</span>
+                <Checkbox
+                  id="removeDuplicate"
+                  value={Number(removeDuplicateCards)}
+                  onCheckedChange={handleRemoveDuplicate}
+                  checked={removeDuplicateCards}
+                />
+              </label>
             </div>
           </div>
         </div>
