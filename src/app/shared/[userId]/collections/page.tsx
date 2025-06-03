@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ userId: strin
   const collections = await getAllSharedCollections(userId);
 
   return (
-    <div>
+    <div className="container mx-auto">
       <h1 className="text-secondary text-3xl font-semibold my-4">
         Collections partagées de <span className="text-yellow-500">{userPseudo}</span>
       </h1>
