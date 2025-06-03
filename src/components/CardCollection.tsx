@@ -137,7 +137,7 @@ export default function CardCollection() {
         </TabsContent>
 
         <TabsContent value="collections">
-          <UserCollections />
+          <UserCollections isCurrentUser={true} />
         </TabsContent>
       </Tabs>
     </div>

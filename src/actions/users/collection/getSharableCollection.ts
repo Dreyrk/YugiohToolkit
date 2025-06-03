@@ -14,7 +14,7 @@ export default async function getSharableCollection(
     const collectionOwner = await Users.findById(userId).select("collections");
 
     const collection = collectionOwner.collections.find(
-      (collection: Collection) => collection._id.toString() === collectionId
+      (collection: Collection) => collection._id.toString() === collectionId && collection.isSharable
     );
 
     if (!collection) {

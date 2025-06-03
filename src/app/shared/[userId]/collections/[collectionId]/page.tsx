@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import getSharableCollection from "@/actions/getSharableCollection";
+import getSharableCollection from "@/actions/users/collection/getSharableCollection";
 import CollectionCardGrid from "@/components/CollectionCardGrid";
 
 export default async function Page({ params }: { params: Promise<{ userId: string; collectionId: string }> }) {

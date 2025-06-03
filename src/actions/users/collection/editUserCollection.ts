@@ -27,6 +27,7 @@ export default async function editCollection(collectionUpdated: Omit<Collection,
     collection.name = collectionUpdated.name;
     collection.description = collectionUpdated.description;
     collection.cards = collectionUpdated.cards;
+    collection.isSharable = collectionUpdated.isSharable;
 
     await user.save();
 

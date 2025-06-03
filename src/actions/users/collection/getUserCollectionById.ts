@@ -63,6 +63,7 @@ export default async function getUserCollectionById(
       name: collection.name,
       description: collection.description,
       cards: collection.cards.map(({ _id, ...card }: CollectionYugiCard) => ({ ...card })),
+      isSharable: collection.isSharable,
     };
   } catch (e) {
     throw new Error(`Error fetching collection: ${(e as Error).message}`);
