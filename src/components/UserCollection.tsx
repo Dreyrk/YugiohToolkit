@@ -4,12 +4,14 @@ import { Pencil, Trash2 } from "lucide-react";
 import { ManageButtonsProps, UserCollectionProps } from "@/types";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
+import ShareButton from "./ui/share-btn";
 
 export default function UserCollection({
   collection,
   pathname,
   handleDeleteCollection,
   isCurrentUser,
+  userId,
 }: UserCollectionProps) {
   return (
     <Card key={collection.id} className="overflow-hidden">
@@ -21,13 +23,13 @@ export default function UserCollection({
               {collection.cards.length} carte{collection.cards.length !== 1 ? "s" : ""}
             </CardDescription>
           </div>
-          {isCurrentUser && (
-            <ManageButtons
-              pathname={pathname}
-              collection={collection}
-              handleDeleteCollection={handleDeleteCollection}
-            />
-          )}
+          <ManageButtons
+            pathname={pathname}
+            userId={userId}
+            isCurrentUser={isCurrentUser}
+            collection={collection}
+            handleDeleteCollection={handleDeleteCollection}
+          />
         </div>
       </CardHeader>
       <CardContent>
@@ -56,16 +58,19 @@ export default function UserCollection({
   );
 }
 
-function ManageButtons({ pathname, collection, handleDeleteCollection }: ManageButtonsProps) {
+function ManageButtons({ pathname, collection, handleDeleteCollection, userId, isCurrentUser }: ManageButtonsProps) {
   return (
     <div className="flex gap-1">
-      <Link href={`${pathname}/${collection.id}?edit=true`}>
-        <Button variant="ghost" size="icon">
-          <Pencil className="h-4 w-4" />
-          <span className="sr-only">Modifier</span>
-        </Button>
-      </Link>
-      {handleDeleteCollection && (
+      <ShareButton url={`/shared/${userId}/collections/${collection.id || collection._id}`} size="sm" text="Partager" />
+      {isCurrentUser && (
+        <Link href={`${pathname}/${collection.id}?edit=true`}>
+          <Button variant="ghost" size="icon">
+            <Pencil className="h-4 w-4" />
+            <span className="sr-only">Modifier</span>
+          </Button>
+        </Link>
+      )}
+      {isCurrentUser && handleDeleteCollection && (
         <form action={handleDeleteCollection}>
           <input id="collectionId" name="collectionId" type="hidden" value={collection.id} />
           <Button variant="ghost" size="icon" type="submit">

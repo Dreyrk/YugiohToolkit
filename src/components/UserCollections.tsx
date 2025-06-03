@@ -25,7 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import createNewUserCollection from "@/actions/users/collection/createNewUserCollection";
 import UserCollection from "./UserCollection";
 
-export default function UserCollections({ isCurrentUser }: { isCurrentUser?: boolean }) {
+export default function UserCollections({ isCurrentUser, userId }: { isCurrentUser?: boolean; userId?: string }) {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
@@ -222,6 +222,7 @@ export default function UserCollections({ isCurrentUser }: { isCurrentUser?: boo
               handleDeleteCollection={handleDeleteCollection}
               pathname={pathname}
               isCurrentUser={isCurrentUser}
+              userId={userId}
             />
           ))}
         </div>

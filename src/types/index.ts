@@ -222,10 +222,13 @@ export type UserCollectionProps = {
   pathname: string;
   handleDeleteCollection?: (formData: FormData) => Promise<void>;
   isCurrentUser?: boolean;
+  userId?: string;
 };
 
 export type ManageButtonsProps = {
   pathname: string;
+  userId?: string;
+  isCurrentUser?: boolean;
   collection: Collection;
   handleDeleteCollection?: (formData: FormData) => Promise<void>;
 };

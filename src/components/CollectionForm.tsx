@@ -123,7 +123,7 @@ export default function CollectionForm({
                 <Checkbox
                   id="isSharable"
                   name="isSharable"
-                  value={isSharable}
+                  value={Number(isSharable)}
                   checked={isSharable}
                   onCheckedChange={(checked) => setIsSharable(Boolean(checked))}
                   disabled={!isEditMode}
