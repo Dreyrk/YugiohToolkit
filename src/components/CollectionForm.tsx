@@ -10,6 +10,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import CollectionCardGrid from "./CollectionCardGrid";
 import SearchCardModal from "./cards/SearchCardModal";
+import { Checkbox } from "./ui/checkbox";
+import removeDuplicates from "@/utils/removeDuplicates";
 
 export default function CollectionForm({
   collection,
@@ -24,6 +26,18 @@ export default function CollectionForm({
 }) {
   const [collectionCards, setCollectionCards] = useState<CollectionYugiCard[]>(collection.cards || []);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [removeDuplicateCards, setRemoveDuplicateCards] = useState(false);
+
+  const handleRemoveDuplicate = () => {
+    console.log(removeDuplicateCards);
+    if (!removeDuplicateCards) {
+      setCollectionCards(removeDuplicates(collection.cards, "id"));
+      setRemoveDuplicateCards(true);
+    } else {
+      setCollectionCards(collection.cards || []);
+      setRemoveDuplicateCards(false);
+    }
+  };
 
   useEffect(() => {
     setCollectionCards(collection.cards || []);
@@ -97,9 +111,15 @@ export default function CollectionForm({
           ) : (
             collection.description && <p>{collection.description}</p>
           )}
-          <p className="text-sm">
-            {collectionCards.length} carte{collectionCards.length !== 1 ? "s" : ""} dans la collection
-          </p>
+          <div className="flex justify-between">
+            <p className="text-sm">
+              {collectionCards.length} carte{collectionCards.length !== 1 ? "s" : ""} dans la collection
+            </p>
+            <div className="flex items-center gap-2 bg-glass px-4 py-2 rounded-xl">
+              <span>Retirer les doublons (pour une vision moins chargée)</span>
+              <Checkbox value={Number(removeDuplicateCards)} onClick={handleRemoveDuplicate} />
+            </div>
+          </div>
         </div>
 
         {isEditMode && (

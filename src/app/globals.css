@@ -64,6 +64,10 @@ header {
   @apply backdrop-blur border-b-2 border-b-black shadow;
 }
 
+.bg-glass {
+  @apply bg-secondary/40 backdrop-blur-sm;
+}
+
 .details-item {
   text-align: center;
   flex-basis: 50%;
