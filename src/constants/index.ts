@@ -1,3 +1,9 @@
+import { FcLibrary } from "react-icons/fc";
+import { GiCardPick, GiTrade } from "react-icons/gi";
+import { BsDatabaseFillAdd } from "react-icons/bs";
+import { Settings } from "lucide-react";
+import { SectionMenu } from "@/types";
+
 export const MainDeckTypes = [
   "Effect Monster",
   "Flip Effect Monster",
@@ -77,4 +83,60 @@ export const DECK_TYPES = [
   { value: "main", label: "Main Deck" },
   { value: "extra", label: "Extra Deck" },
   { value: "side", label: "Side Deck" },
+];
+
+export const profileSections: SectionMenu[] = [
+  {
+    title: "Cartes Yu-Gi-Oh",
+    description: "Gestion de tes cartes (collections, decks, etc...)",
+    links: [
+      {
+        title: "Collections",
+        href: "collections",
+        description: "Voir et gérer vos collections",
+        icon: FcLibrary,
+        color: "bg-amber-100",
+      },
+      {
+        title: "Mes Decks",
+        href: "decks",
+        description: "Accéder à vos decks enregistrés",
+        icon: GiCardPick,
+        color: "bg-indigo-100",
+      },
+      {
+        title: "Compléter la database",
+        href: "cards/new",
+        description: "Ajouter de nouvelles cartes à la base",
+        icon: BsDatabaseFillAdd,
+        color: "bg-green-100",
+      },
+    ],
+  },
+  {
+    title: "Social",
+    description: "Intéragis avec les autres utilisateurs",
+    links: [
+      {
+        title: "Echanges de cartes",
+        href: "social/trade",
+        description: "Fais des propositions d'échanges avec les autres utilisateurs",
+        icon: GiTrade,
+        color: "bg-neutral-200",
+      },
+    ],
+  },
+  {
+    title: "Mon Compte",
+    description: "Gestion et personnalisation de ton compte",
+    links: [
+      {
+        title: "Paramètres",
+        href: "settings",
+        description: "Modifier vos informations et préférences",
+        icon: Settings,
+        color: "bg-neutral-200",
+      },
+    ],
+  },
 ];

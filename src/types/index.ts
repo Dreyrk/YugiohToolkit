@@ -93,6 +93,7 @@ export type SessionUser = {
   id: string;
   pseudo: string;
   email: string;
+  img?: string;
 };
 
 export interface User {
@@ -231,4 +232,18 @@ export type ManageButtonsProps = {
   isCurrentUser?: boolean;
   collection: Collection;
   handleDeleteCollection?: (formData: FormData) => Promise<void>;
+};
+
+export type SectionMenuLink = {
+  title: string;
+  href: string;
+  description: string;
+  icon: IconType;
+  color: string;
+};
+
+export type SectionMenu = {
+  title: string;
+  description: string;
+  links: SectionMenuLink[];
 };
