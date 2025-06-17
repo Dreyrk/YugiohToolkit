@@ -61,7 +61,7 @@ export default function UserDropdown({ user }: { user: SessionUser | null }) {
                   return (
                     <CommandItem
                       key={link.href}
-                      onSelect={() => (window.location.href = `/${link.href}`)}
+                      onSelect={() => (window.location.href = `/profile/${user.id}/${link.href}`)}
                       className="cursor-pointer">
                       <div className={`p-2 rounded-md ${link.color} mr-2`}>
                         <IconComponent className="h-4 w-4" />
