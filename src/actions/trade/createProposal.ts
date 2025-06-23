@@ -6,11 +6,8 @@ import db from "@/lib/database/db";
 import TradeProposals from "@/lib/database/models/trade/tradeProposal.model";
 import { getSession } from "../auth/getSession";
 import { TradeFormSchema } from "@/schemas";
+import { FormState } from "@/types";
 
-type FormState = {
-  message: string;
-  success?: boolean;
-};
 export async function createTradeProposal(prevState: FormState | undefined, formData: FormData): Promise<FormState> {
   try {
     await db();

@@ -267,3 +267,14 @@ export interface TradeProposalCardProps {
 export interface TradeProposalListProps {
   proposals: PopulatedTradeProposal[];
 }
+
+export interface MakeOfferModalProps {
+  proposalId: string;
+  proposerPseudo: string;
+  children: React.ReactNode;
+}
+
+export type FormState = {
+  message: string;
+  success?: boolean;
+};

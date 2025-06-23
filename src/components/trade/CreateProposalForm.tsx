@@ -17,11 +17,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import FormMessage from "../ui/form-message";
 
 function SubmitButton({ pending }: { pending: boolean }) {
   return (
-    <Button type="submit" disabled={pending} className="w-full">
-      {pending ? <Loader absolute={false} /> : null}
+    <Button type="submit" disabled={pending} className="w-full flex gap-4 justify-center items-center">
+      {pending ? <Loader size={20} absolute={false} /> : null}
       {pending ? "Création en cours..." : "Créer la proposition"}
     </Button>
   );
@@ -162,7 +163,7 @@ export function CreateProposalForm({ userId }: { userId: string }) {
             </>
           )}
 
-          {formState?.message && <p className="text-sm font-medium text-destructive">{formState.message}</p>}
+          {formState?.message && <FormMessage success={formState.success} message={formState.message} />}
         </form>
       </CardContent>
     </Card>

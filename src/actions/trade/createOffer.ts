@@ -1,32 +1,38 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { ZodError } from "zod";
 import db from "@/lib/database/db";
 import TradeOffers from "@/lib/database/models/trade/tradeOffer.model";
 import TradeProposals from "@/lib/database/models/trade/tradeProposal.model";
 import { getSession } from "../auth/getSession";
 import { TradeFormSchema } from "@/schemas";
+import { FormState } from "@/types";
 
-export async function createTradeOffer(proposalId: string, formData: FormData) {
+export async function createTradeOffer(prevState: FormState | undefined, formData: FormData): Promise<FormState> {
   try {
     await db();
 
+    const proposalId = formData.get("proposalId") as string;
+    if (!proposalId) {
+      return { success: false, message: "ID de la proposition manquant." };
+    }
+
     const session = await getSession();
     if (!session?.user?.id) {
-      throw new Error("Vous devez être connecté pour faire une offre.");
+      return { success: false, message: "Vous devez être connecté pour faire une offre." };
     }
     const offererId = session.user.id;
 
     const proposal = await TradeProposals.findById(proposalId);
-
     if (!proposal) {
-      throw new Error("La proposition n'existe pas.");
+      return { success: false, message: "La proposition n'existe pas." };
     }
     if (proposal.status !== "active") {
-      throw new Error("Vous ne pouvez plus faire d'offre sur cette proposition.");
+      return { success: false, message: "Vous ne pouvez plus faire d'offre sur cette proposition." };
     }
     if (proposal.proposer.toString() === offererId) {
-      throw new Error("Vous ne pouvez pas faire d'offre sur votre propre proposition.");
+      return { success: false, message: "Vous ne pouvez pas faire d'offre sur votre propre proposition." };
     }
 
     const validatedData = TradeFormSchema.parse({
@@ -48,10 +54,16 @@ export async function createTradeOffer(proposalId: string, formData: FormData) {
     });
 
     revalidatePath(`/`);
+
+    return { success: true, message: "Offre envoyée avec succès !" };
   } catch (error) {
     console.error("Erreur lors de la création de l'offre:", error);
-    return { message: "Une erreur est survenue lors de la création de l'offre." };
+    if (error instanceof ZodError) {
+      return {
+        success: false,
+        message: "Erreur de validation: " + error.errors.map((e) => e.message).join(", "),
+      };
+    }
+    return { success: false, message: "Une erreur interne est survenue." };
   }
-
-  return { success: true, message: "Offre envoyée avec succès !" };
 }

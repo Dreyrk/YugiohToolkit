@@ -28,7 +28,7 @@ export default async function Page({
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 text-slate-50 mt-2">
           <div>
-            <h1 className="text-4xl font-bold mb-2">Place d&apos;échange</h1>
+            <h1 className="text-4xl font-bold mb-2">Échanges de cartes</h1>
             <p className="italic text-slate-200">Trouvez une carte à échanger ou proposez les vôtres.</p>
           </div>
           <div className="mt-4 md:mt-0">

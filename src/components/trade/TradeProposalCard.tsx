@@ -1,8 +1,9 @@
-import Image from "next/image";
 import { TradeProposalCardProps, YugiCards } from "@/types";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import YugiCard from "../cards/YugiCard";
+import { MakeOfferModal } from "./MakeOfferModal";
+import { Button } from "../ui/button";
 
 export default function TradeProposalCard({ proposal }: TradeProposalCardProps) {
   return (
@@ -13,7 +14,7 @@ export default function TradeProposalCard({ proposal }: TradeProposalCardProps) 
         </div>
         <CardTitle className="text-lg">{proposal.card.name}</CardTitle>
         <CardDescription>
-          Proposé par <span className="text-blue-500">@{proposal.proposer.pseudo}</span>
+          Proposé par <span className="text-blue-500 cursor-pointer">@{proposal.proposer.pseudo}</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
@@ -27,8 +28,9 @@ export default function TradeProposalCard({ proposal }: TradeProposalCardProps) 
         </div>
       </CardContent>
       <CardFooter>
-        <p className="text-blue-500">Ici, le bouton pour faire une offre.</p>
-        {/* <MakeOfferDialog proposalId={proposal.id} /> */}
+        <MakeOfferModal proposalId={proposal.id} proposerPseudo={proposal.proposer.pseudo}>
+          <Button className="w-full">Faire une offre</Button>
+        </MakeOfferModal>
       </CardFooter>
     </Card>
   );
