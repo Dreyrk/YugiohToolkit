@@ -247,3 +247,23 @@ export type SectionMenu = {
   description: string;
   links: SectionMenuLink[];
 };
+
+export type PopulatedTradeProposal = {
+  id: string;
+  cardDetails: { condition: string; language: string; notes?: string };
+  createdAt: string;
+  card: { id: string; name: string; img: string; type: string };
+  proposer: { id: string; pseudo: string };
+};
+
+export interface TradeProposalListProps {
+  proposals: PopulatedTradeProposal[];
+}
+
+export interface TradeProposalCardProps {
+  proposal: PopulatedTradeProposal;
+}
+
+export interface TradeProposalListProps {
+  proposals: PopulatedTradeProposal[];
+}
