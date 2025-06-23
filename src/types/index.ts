@@ -93,6 +93,7 @@ export type SessionUser = {
   id: string;
   pseudo: string;
   email: string;
+  img?: string;
 };
 
 export interface User {
@@ -231,4 +232,49 @@ export type ManageButtonsProps = {
   isCurrentUser?: boolean;
   collection: Collection;
   handleDeleteCollection?: (formData: FormData) => Promise<void>;
+};
+
+export type SectionMenuLink = {
+  title: string;
+  href: string;
+  description: string;
+  icon: IconType;
+  color: string;
+};
+
+export type SectionMenu = {
+  title: string;
+  description: string;
+  links: SectionMenuLink[];
+};
+
+export type PopulatedTradeProposal = {
+  id: string;
+  cardDetails: { condition: string; language: string; notes?: string };
+  createdAt: string;
+  card: { id: string; name: string; img: string; type: string };
+  proposer: { id: string; pseudo: string };
+};
+
+export interface TradeProposalListProps {
+  proposals: PopulatedTradeProposal[];
+}
+
+export interface TradeProposalCardProps {
+  proposal: PopulatedTradeProposal;
+}
+
+export interface TradeProposalListProps {
+  proposals: PopulatedTradeProposal[];
+}
+
+export interface MakeOfferModalProps {
+  proposalId: string;
+  proposerPseudo: string;
+  children: React.ReactNode;
+}
+
+export type FormState = {
+  message: string;
+  success?: boolean;
 };

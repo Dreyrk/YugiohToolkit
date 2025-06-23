@@ -4,6 +4,7 @@ import { getSession } from "@/actions/auth/getSession";
 import db from "@/lib/database/db";
 import Users from "@/lib/database/models/users.model";
 import { Collection } from "@/types";
+import compareArrays from "@/utils/compareArrays";
 
 export default async function editCollection(collectionUpdated: Omit<Collection, "_id">) {
   try {
@@ -26,7 +27,9 @@ export default async function editCollection(collectionUpdated: Omit<Collection,
 
     collection.name = collectionUpdated.name;
     collection.description = collectionUpdated.description;
-    collection.cards = collectionUpdated.cards;
+    if (!compareArrays(collection.cards, collectionUpdated.cards)) {
+      collection.cards = collectionUpdated.cards;
+    }
     collection.isSharable = collectionUpdated.isSharable;
 
     await user.save();

@@ -67,6 +67,7 @@ export default function YugiCard({
       <Image
         className="z-40"
         src={card.img}
+        loading="lazy"
         placeholder="blur"
         blurDataURL="/assets/cardBack.jpg"
         alt="card"

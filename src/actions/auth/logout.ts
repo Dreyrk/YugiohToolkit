@@ -14,5 +14,5 @@ export default async function logout() {
       cookieStore.delete(lucia.sessionCookieName);
     }
   }
-  redirect("/auth");
+  redirect("/");
 }

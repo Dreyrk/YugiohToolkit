@@ -21,22 +21,19 @@ export default function SearchCardModal({ onAddCard, onClose, currentCards }: Se
   const [hasMore, setHasMore] = useState(true);
 
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
-  const limit = 40; // On charge moins de cartes dans la modale pour la performance
+  const limit = 40;
 
-  // Reset la recherche et la pagination quand le terme de recherche change
   useEffect(() => {
     setResults([]);
     setPage(1);
     setHasMore(true);
   }, [debouncedSearchTerm]);
 
-  // Récupère les cartes à chaque changement de page ou de terme de recherche
   useEffect(() => {
-    // Ne rien faire si le terme est trop court (sauf si vide, pour afficher les cartes populaires par ex.)
     if (debouncedSearchTerm.length > 0 && debouncedSearchTerm.length < 3) return;
     if (!hasMore) return;
 
-    fetchCards(true); // `isNewSearch` est vrai pour réinitialiser le tableau
+    fetchCards(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, debouncedSearchTerm]);
 
@@ -53,8 +50,6 @@ export default function SearchCardModal({ onAddCard, onClose, currentCards }: Se
 
       const data = await response.json();
 
-      // Si c'est une nouvelle recherche (ou la première page), on remplace les résultats
-      // Sinon, on ajoute les nouveaux résultats à la suite
       setResults((prev) => (isNewSearch || page === 1 ? data : [...prev, ...data]));
       setHasMore(data.length === limit);
     } catch (error) {
@@ -70,7 +65,6 @@ export default function SearchCardModal({ onAddCard, onClose, currentCards }: Se
     }
   };
 
-  // LA LOGIQUE DE CLIC EST SIMPLE ICI : on appelle juste la fonction du parent
   const handleCardClick = (card: CollectionYugiCard) => {
     onAddCard(card);
   };
@@ -101,7 +95,7 @@ export default function SearchCardModal({ onAddCard, onClose, currentCards }: Se
             cards={results}
             onCardSelect={handleCardClick}
             selectedCards={currentCards}
-            isLoading={isLoading && page === 1} // On affiche le loader principal uniquement pour la première charge
+            isLoading={isLoading && page === 1}
           />
           {hasMore && (
             <div className="flex justify-center mt-4">
